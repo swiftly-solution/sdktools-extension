@@ -1,10 +1,14 @@
 #include "entrypoint.h"
+#include "entities.h"
 
 //////////////////////////////////////////////////////////////
 /////////////////        Core Variables        //////////////
 ////////////////////////////////////////////////////////////
 
-BaseExtension g_Ext;
+SH_DECL_HOOK3_void(INetworkServerService, StartupServer, SH_NOATTRIB, 0, const GameSessionConfiguration_t&, ISource2WorldSession*, const char*);
+
+SDKTools g_Ext;
+EntityListener g_entListener;
 CUtlVector<FuncHookBase *> g_vecHooks;
 CREATE_GLOBALVARS();
 
@@ -13,55 +17,59 @@ CREATE_GLOBALVARS();
 ////////////////////////////////////////////////////////////
 
 EXT_EXPOSE(g_Ext);
-bool BaseExtension::Load(std::string& error, SourceHook::ISourceHook *SHPtr, ISmmAPI* ismm, bool late)
+bool SDKTools::Load(std::string& error, SourceHook::ISourceHook *SHPtr, ISmmAPI* ismm, bool late)
 {
     SAVE_GLOBALVARS();
+    
+    GET_IFACE_ANY(GetEngineFactory, g_pNetworkServerService, INetworkServerService, NETWORKSERVERSERVICE_INTERFACE_VERSION);
+
     if(!InitializeHooks()) {
         error = "Failed to initialize hooks.";
         return false;
     }
 
-    ismm->ConPrint("Printing a text from extensions land!\n");
+    g_entListener.Initialize();
     return true;
 }
 
-bool BaseExtension::Unload(std::string& error)
+bool SDKTools::Unload(std::string& error)
 {
     UnloadHooks();
+    g_entListener.Destroy();
     return true;
 }
 
-void BaseExtension::AllExtensionsLoaded()
+void SDKTools::AllExtensionsLoaded()
 {
 
 }
 
-void BaseExtension::AllPluginsLoaded()
+void SDKTools::AllPluginsLoaded()
 {
 
 }
 
-bool BaseExtension::OnPluginLoad(std::string pluginName, void* pluginState, PluginKind_t kind, std::string& error)
-{
-    return true;
-}
-
-bool BaseExtension::OnPluginUnload(std::string pluginName, void* pluginState, PluginKind_t kind, std::string& error)
+bool SDKTools::OnPluginLoad(std::string pluginName, void* pluginState, PluginKind_t kind, std::string& error)
 {
     return true;
 }
 
-const char* BaseExtension::GetAuthor()
+bool SDKTools::OnPluginUnload(std::string pluginName, void* pluginState, PluginKind_t kind, std::string& error)
+{
+    return true;
+}
+
+const char* SDKTools::GetAuthor()
 {
     return "Swiftly Development Team";
 }
 
-const char* BaseExtension::GetName()
+const char* SDKTools::GetName()
 {
-    return "Base Extension";
+    return "SDKTools Extension";
 }
 
-const char* BaseExtension::GetVersion()
+const char* SDKTools::GetVersion()
 {
 #ifndef VERSION
     return "Local";
@@ -70,7 +78,7 @@ const char* BaseExtension::GetVersion()
 #endif
 }
 
-const char* BaseExtension::GetWebsite()
+const char* SDKTools::GetWebsite()
 {
     return "https://swiftlycs2.net/";
 }

@@ -1,13 +1,22 @@
 #ifndef _entrypoint_h
 #define _entrypoint_h
 
+#define META_IS_SOURCE2 1
+
 #include <string>
+#include "utils.h"
 
 #include <swiftly-ext/core.h>
 #include <swiftly-ext/extension.h>
 #include <swiftly-ext/hooks/NativeHooks.h>
 
-class BaseExtension : public SwiftlyExt
+#include "iserver.h"
+
+class GameSessionConfiguration_t
+{
+};
+
+class SDKTools : public SwiftlyExt
 {
 public:
     bool Load(std::string& error, SourceHook::ISourceHook *SHPtr, ISmmAPI* ismm, bool late);
@@ -26,7 +35,7 @@ public:
     const char* GetWebsite();
 };
 
-extern BaseExtension g_Ext;
+extern SDKTools g_Ext;
 DECLARE_GLOBALVARS();
 
 #endif

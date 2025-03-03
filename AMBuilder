@@ -2,8 +2,8 @@ import os
 import fnmatch
 import json
 
-MMSPlugin.plugin_name = 'baseext'
-MMSPlugin.plugin_alias = 'baseext'
+MMSPlugin.plugin_name = 'sdktools.ext'
+MMSPlugin.plugin_alias = 'sdktools.ext'
 
 for sdk_target in MMSPlugin.sdk_targets:
     sdk = sdk_target.sdk
