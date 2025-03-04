@@ -3,7 +3,7 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/build/sdktools/windows-x86_64/**",
+                "${workspaceFolder}/build/sdktools.ext/windows-x86_64/**",
                 "${workspaceFolder}/alliedmodders/hl2sdk/**",
                 "${workspaceFolder}/alliedmodders/metamod/**",
                 "${workspaceFolder}/alliedmodders/metamod/core/**",
@@ -26,7 +26,7 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/build/sdktools/linux-x86_64/**",
+                "${workspaceFolder}/build/sdktools.ext/linux-x86_64/**",
                 "${workspaceFolder}/alliedmodders/hl2sdk/**",
                 "${workspaceFolder}/alliedmodders/metamod/**",
                 "${workspaceFolder}/alliedmodders/metamod/core/**",

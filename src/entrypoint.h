@@ -16,6 +16,8 @@ class GameSessionConfiguration_t
 {
 };
 
+class IVPhysics2;
+
 class SDKTools : public SwiftlyExt
 {
 public:
@@ -36,6 +38,7 @@ public:
 };
 
 extern SDKTools g_Ext;
+extern IVPhysics2* g_Physics;
 DECLARE_GLOBALVARS();
 
 #endif
