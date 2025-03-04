@@ -66,6 +66,9 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "any": "cpp",
-        "optional": "cpp"
+        "optional": "cpp",
+        "codecvt": "cpp",
+        "future": "cpp",
+        "variant": "cpp"
     }
 }
