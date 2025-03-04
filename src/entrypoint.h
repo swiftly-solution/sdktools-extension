@@ -3,13 +3,14 @@
 
 #define META_IS_SOURCE2 1
 
+#include <string>
+#include "utils.h"
+
 #include <swiftly-ext/core.h>
 #include <swiftly-ext/extension.h>
 #include <swiftly-ext/hooks/NativeHooks.h>
 
-#include <string>
 #include "iserver.h"
-#include "utils.h"
 
 class GameSessionConfiguration_t
 {

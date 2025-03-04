@@ -1,8 +1,8 @@
 #ifndef _entities_h
 #define _entities_h
 
-#include <swiftly-ext/memory.h>
 #include "entrypoint.h"
+#include <swiftly-ext/memory.h>
 
 class EntityListener
 {
