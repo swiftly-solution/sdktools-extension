@@ -184,8 +184,6 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
             .addConstant("HITBOX_SHAPE_CAPSULE", (uint64_t)HitboxShapeType_t::HITBOX_SHAPE_CAPSULE)
         .endNamespace();
 
-
-
     GetGlobalNamespace(ctx).addConstant("raytrace", RayTrace(plugin_name));
 }
 
@@ -207,5 +205,5 @@ void RayTrace::TraceShape(Vector* start, Vector* end, InternalRay_t* ray, CInter
     void* sig = GetSignature("TraceShape");
     if(sig == nullptr) return;
 
-    reinterpret_cast<TraceShape_t>(sig)(g_Physics, *ray->GetRawRay(), *start, *end, filter->GetRawTraceFilter(), trace->GetRawTrace());
+    reinterpret_cast<TraceShape_t>(sig)(g_Physics, *(ray->GetRawRay()), *start, *end, filter->GetRawTraceFilter(), trace->GetRawTrace());
 }
