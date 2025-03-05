@@ -114,6 +114,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
     .endClass();
 
     BeginClass<CGameTraceInternal>("trace_t", ctx)
+        .addConstructor<>()
         .addProperty("SurfaceProperties", &CGameTraceInternal::m_pSurfaceProperties)
         .addProperty("Hitbox", &CGameTraceInternal::m_pHitbox)
         .addProperty("Contents", &CGameTraceInternal::m_nContents)
