@@ -8,7 +8,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         .addConstructor<>()
         .addProperty("mins", &bbox_t::mins)
         .addProperty("maxs", &bbox_t::maxs)
-    .endClass();
+        .endClass();
 
     BeginClass<CInternalTraceFilter>("CTraceFilter", ctx)
         .addConstructor<>()
@@ -29,7 +29,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         .addProperty("Unknown", &CInternalTraceFilter::m_bUnknown)
         .addProperty("IterateEntities", &CInternalTraceFilter::m_bIterateEntities)
         .addFunction("Save", &CInternalTraceFilter::Save)
-    .endClass();
+        .endClass();
 
     BeginClass<CPhysSurfacePropertiesPhysics>("CPhysSurfacePropertiesPhysics", ctx)
         .addConstructor<>()
@@ -40,7 +40,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         .addProperty("softContactFrequency", &CPhysSurfacePropertiesPhysics::m_softContactFrequency)
         .addProperty("softContactDampingRatio", &CPhysSurfacePropertiesPhysics::m_softContactDampingRatio)
         .addProperty("wheelDrag", &CPhysSurfacePropertiesPhysics::m_wheelDrag)
-    .endClass();
+        .endClass();
 
     BeginClass<CPhysSurfacePropertiesAudio>("CPhysSurfacePropertiesAudio", ctx)
         .addConstructor<>()
@@ -52,7 +52,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         .addProperty("hardVelocityThreshold", &CPhysSurfacePropertiesAudio::m_hardVelocityThreshold)
         .addProperty("StaticImpactVolume", &CPhysSurfacePropertiesAudio::m_flStaticImpactVolume)
         .addProperty("OcclusionFactor", &CPhysSurfacePropertiesAudio::m_flOcclusionFactor)
-    .endClass();
+        .endClass();
 
     BeginClass<CPhysSurfacePropertiesSoundNames>("CPhysSurfacePropertiesSoundNames", ctx)
         .addConstructor<>()
@@ -67,7 +67,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         .addProperty("meleeImpact", &CPhysSurfacePropertiesSoundNames::m_meleeImpact)
         .addProperty("pushOff", &CPhysSurfacePropertiesSoundNames::m_pushOff)
         .addProperty("skidStop", &CPhysSurfacePropertiesSoundNames::m_skidStop)
-    .endClass();
+        .endClass();
 
     BeginClass<CPhysSurfaceProperties>("CPhysSurfaceProperties", ctx)
         .addConstructor<>()
@@ -81,7 +81,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         .addProperty("physics", &CPhysSurfaceProperties::m_physics)
         .addProperty("audioSounds", &CPhysSurfaceProperties::m_audioSounds)
         .addProperty("audioParams", &CPhysSurfaceProperties::m_audioParams)
-    .endClass();
+        .endClass();
 
     BeginClass<CHitBox>("CHitBox", ctx)
         .addConstructor<>()
@@ -99,7 +99,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         .addProperty("RenderColor", &CHitBox::m_cRenderColor)
         .addProperty("HitBoxIndex", &CHitBox::m_nHitBoxIndex)
         .addProperty("ShouldForceTransform", &CHitBox::m_bForcedTransform)
-    .endClass();
+        .endClass();
 
     BeginClass<RnCollisionAttr_t>("RnCollisionAttr_t", ctx)
         .addConstructor<>()
@@ -111,7 +111,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         .addProperty("HierarchyId", &RnCollisionAttr_t::m_nHierarchyId)
         .addProperty("CollisionGroup", &RnCollisionAttr_t::m_nCollisionGroup)
         .addProperty("CollisionFunctionMask", &RnCollisionAttr_t::m_nCollisionFunctionMask)
-    .endClass();
+        .endClass();
 
     BeginClass<CGameTraceInternal>("trace_t", ctx)
         .addConstructor<>()
@@ -134,7 +134,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         .addFunction("SyncToTrace", &CGameTraceInternal::SyncToTrace)
         .addFunction("SyncFromTrace", &CGameTraceInternal::SyncFromTrace)
         .addFunction("GetRawTrace", &CGameTraceInternal::GetRawTracePtr)
-    .endClass();
+        .endClass();
 
     BeginClass<InternalRay_t>("Ray_t", ctx)
         .addConstructor<>()
@@ -145,43 +145,43 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         .addFunction("InitMesh", &InternalRay_t::InitMesh)
         .addFunction("GetRayPtr", &InternalRay_t::GetRayPtr)
         .addFunction("GetType", &InternalRay_t::GetType)
-    .endClass();
+        .endClass();
 
     BeginClass<RayTrace>("RayTrace", ctx)
         .addConstructor<std::string>()
         .addFunction("TracePlayerBBox", &RayTrace::TracePlayerBBox)
         .addFunction("TraceShape", &RayTrace::TraceShape)
-    .endClass();
+        .endClass();
 
     GetGlobalNamespace(ctx)
         .beginNamespace("RayType_t")
-            .addConstant("RAY_TYPE_LINE", (uint64_t)RayType_t::RAY_TYPE_LINE)
-            .addConstant("RAY_TYPE_SPHERE", (uint64_t)RayType_t::RAY_TYPE_SPHERE)
-            .addConstant("RAY_TYPE_HULL", (uint64_t)RayType_t::RAY_TYPE_HULL)
-            .addConstant("RAY_TYPE_CAPSULE", (uint64_t)RayType_t::RAY_TYPE_CAPSULE)
-            .addConstant("RAY_TYPE_MESH", (uint64_t)RayType_t::RAY_TYPE_MESH)
+        .addConstant("RAY_TYPE_LINE", (uint64_t)RayType_t::RAY_TYPE_LINE)
+        .addConstant("RAY_TYPE_SPHERE", (uint64_t)RayType_t::RAY_TYPE_SPHERE)
+        .addConstant("RAY_TYPE_HULL", (uint64_t)RayType_t::RAY_TYPE_HULL)
+        .addConstant("RAY_TYPE_CAPSULE", (uint64_t)RayType_t::RAY_TYPE_CAPSULE)
+        .addConstant("RAY_TYPE_MESH", (uint64_t)RayType_t::RAY_TYPE_MESH)
         .endNamespace()
         .beginNamespace("CollisionFunctionMask_t")
-            .addConstant("FCOLLISION_FUNC_ENABLE_SOLID_CONTACT", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_SOLID_CONTACT)
-            .addConstant("FCOLLISION_FUNC_ENABLE_TRACE_QUERY", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_TRACE_QUERY)
-            .addConstant("FCOLLISION_FUNC_ENABLE_TOUCH_EVENT", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_TOUCH_EVENT)
-            .addConstant("FCOLLISION_FUNC_ENABLE_SELF_COLLISIONS", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_SELF_COLLISIONS)
-            .addConstant("FCOLLISION_FUNC_IGNORE_FOR_HITBOX_TEST", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_IGNORE_FOR_HITBOX_TEST)
-            .addConstant("FCOLLISION_FUNC_ENABLE_TOUCH_PERSISTS", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_TOUCH_PERSISTS)
+        .addConstant("FCOLLISION_FUNC_ENABLE_SOLID_CONTACT", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_SOLID_CONTACT)
+        .addConstant("FCOLLISION_FUNC_ENABLE_TRACE_QUERY", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_TRACE_QUERY)
+        .addConstant("FCOLLISION_FUNC_ENABLE_TOUCH_EVENT", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_TOUCH_EVENT)
+        .addConstant("FCOLLISION_FUNC_ENABLE_SELF_COLLISIONS", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_SELF_COLLISIONS)
+        .addConstant("FCOLLISION_FUNC_IGNORE_FOR_HITBOX_TEST", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_IGNORE_FOR_HITBOX_TEST)
+        .addConstant("FCOLLISION_FUNC_ENABLE_TOUCH_PERSISTS", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_TOUCH_PERSISTS)
         .endNamespace()
         .beginNamespace("RnQueryObjectSet")
-            .addConstant("RNQUERY_OBJECTS_STATIC", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_STATIC)
-            .addConstant("RNQUERY_OBJECTS_DYNAMIC", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_DYNAMIC)
-            .addConstant("RNQUERY_OBJECTS_NON_COLLIDEABLE", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_NON_COLLIDEABLE)
-            .addConstant("RNQUERY_OBJECTS_KEYFRAMED_ONLY", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_KEYFRAMED_ONLY)
-            .addConstant("RNQUERY_OBJECTS_DYNAMIC_ONLY", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_DYNAMIC_ONLY)
-            .addConstant("RNQUERY_OBJECTS_ALL_GAME_ENTITIES", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_ALL_GAME_ENTITIES)
-            .addConstant("RNQUERY_OBJECTS_ALL", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_ALL)
+        .addConstant("RNQUERY_OBJECTS_STATIC", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_STATIC)
+        .addConstant("RNQUERY_OBJECTS_DYNAMIC", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_DYNAMIC)
+        .addConstant("RNQUERY_OBJECTS_NON_COLLIDEABLE", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_NON_COLLIDEABLE)
+        .addConstant("RNQUERY_OBJECTS_KEYFRAMED_ONLY", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_KEYFRAMED_ONLY)
+        .addConstant("RNQUERY_OBJECTS_DYNAMIC_ONLY", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_DYNAMIC_ONLY)
+        .addConstant("RNQUERY_OBJECTS_ALL_GAME_ENTITIES", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_ALL_GAME_ENTITIES)
+        .addConstant("RNQUERY_OBJECTS_ALL", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_ALL)
         .endNamespace()
         .beginNamespace("HitboxShapeType_t")
-            .addConstant("HITBOX_SHAPE_HULL", (uint64_t)HitboxShapeType_t::HITBOX_SHAPE_HULL)
-            .addConstant("HITBOX_SHAPE_SPHERE", (uint64_t)HitboxShapeType_t::HITBOX_SHAPE_SPHERE)
-            .addConstant("HITBOX_SHAPE_CAPSULE", (uint64_t)HitboxShapeType_t::HITBOX_SHAPE_CAPSULE)
+        .addConstant("HITBOX_SHAPE_HULL", (uint64_t)HitboxShapeType_t::HITBOX_SHAPE_HULL)
+        .addConstant("HITBOX_SHAPE_SPHERE", (uint64_t)HitboxShapeType_t::HITBOX_SHAPE_SPHERE)
+        .addConstant("HITBOX_SHAPE_CAPSULE", (uint64_t)HitboxShapeType_t::HITBOX_SHAPE_CAPSULE)
         .endNamespace();
 
     GetGlobalNamespace(ctx).addConstant("raytrace", RayTrace(plugin_name));
@@ -192,18 +192,22 @@ RayTrace::RayTrace(std::string plugin_name)
     m_plugin_name = plugin_name;
 }
 
-void RayTrace::TracePlayerBBox(Vector *start, Vector *end, bbox_t *bounds, CInternalTraceFilter *filter, CGameTraceInternal* trace)
+void RayTrace::TracePlayerBBox(Vector* start, Vector* end, bbox_t* bounds, CInternalTraceFilter* filter, CGameTraceInternal* trace)
 {
     void* sig = GetSignature("TracePlayerBBox");
-    if(sig == nullptr) return;
+    if (sig == nullptr) return;
 
+    filter->Save();
     reinterpret_cast<TracePlayerBBox_t>(sig)(*start, *end, *bounds, filter->GetRawTraceFilter(), *trace->GetRawTrace());
+    trace->SyncFromTrace();
 }
 
-void RayTrace::TraceShape(Vector* start, Vector* end, InternalRay_t* ray, CInternalTraceFilter *filter, CGameTraceInternal* trace)
+void RayTrace::TraceShape(Vector* start, Vector* end, InternalRay_t* ray, CInternalTraceFilter* filter, CGameTraceInternal* trace)
 {
     void* sig = GetSignature("TraceShape");
-    if(sig == nullptr) return;
+    if (sig == nullptr) return;
 
+    filter->Save();
     reinterpret_cast<TraceShape_t>(sig)(g_Physics, *(ray->GetRawRay()), *start, *end, filter->GetRawTraceFilter(), trace->GetRawTrace());
+    trace->SyncFromTrace();
 }
