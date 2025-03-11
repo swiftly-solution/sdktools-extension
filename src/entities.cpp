@@ -127,7 +127,7 @@ void OnPostEndTouch(CEntityInstance* ent)
 
 void OnUse(class InputData_t* ent)
 {
-    if(TriggerEvent("sdktools.ext", "OnEntityUse", { string_format("%p", META_IFACEPTR(CEntityInstance)), "CEntityInstance", string_format("%p", ent->pActivator), "CEntityInstance", string_format("%p", ent->pCaller), "CEntityInstance", std::string(ent->value.ToString()), ent->nOutputID }, tmpret) == EventResult::Stop)
+    if(TriggerEvent("sdktools.ext", "OnEntityUse", { string_format("%p", META_IFACEPTR(CEntityInstance)), "CEntityInstance", string_format("%p", ent->pActivator), "CEntityInstance", string_format("%p", ent->pCaller), "CEntityInstance", (std::string(VariantFieldTypeName(ent->value.m_type)) == "unknown_variant_type") ? "(null)" : ent->value.ToString(), ent->nOutputID }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
 
     RETURN_META(MRES_IGNORED);
@@ -135,7 +135,7 @@ void OnUse(class InputData_t* ent)
 
 void OnPostUse(class InputData_t* ent)
 {
-    if(TriggerEvent("sdktools.ext", "OnPostEntityUse", { string_format("%p", META_IFACEPTR(CEntityInstance)), "CEntityInstance", string_format("%p", ent->pActivator), "CEntityInstance", string_format("%p", ent->pCaller), "CEntityInstance", std::string(ent->value.ToString()), ent->nOutputID }, tmpret) == EventResult::Stop)
+    if(TriggerEvent("sdktools.ext", "OnPostEntityUse", { string_format("%p", META_IFACEPTR(CEntityInstance)), "CEntityInstance", string_format("%p", ent->pActivator), "CEntityInstance", string_format("%p", ent->pCaller), "CEntityInstance", (std::string(VariantFieldTypeName(ent->value.m_type)) == "unknown_variant_type") ? "(null)" : ent->value.ToString(), ent->nOutputID }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
 
     RETURN_META(MRES_IGNORED);
