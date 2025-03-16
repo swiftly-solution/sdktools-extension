@@ -41,17 +41,6 @@ for sdk_target in MMSPlugin.sdk_targets:
     for incl in incls:
         binary.compiler.cxxincludes += [os.path.join(builder.sourcePath, 'vendor', 'embedder', 'libs', incl)]
 
-    files = embedder_linking["source_code"]["files"]
-    for file in files:
-        binary.sources.append(os.path.join(builder.sourcePath, "vendor", "embedder", "libs", file))
-
-    directories = embedder_linking["source_code"]["directories"]
-    for directory in directories:
-        for root, dirs, files in os.walk(os.path.join(builder.sourcePath, "vendor", "embedder", "libs", directory)):
-            for _file in files:
-                if fnmatch.fnmatch(_file, '*.cpp'):
-                    binary.sources.append(os.path.join(root, _file).replace("\\", "/"))
-
     if binary.compiler.target.platform == 'linux':
         binary.compiler.cxxflags += [
             "-Wno-invalid-offsetof",
