@@ -55,26 +55,18 @@ void CEntityListener::OnEntityParentChanged(CEntityInstance* pEntity, CEntityIns
 
 void CEntityListener::OnEntityCreated(CEntityInstance* pEntity)
 {
-    SH_ADD_MANUALHOOK_STATICFUNC(StartTouch, pEntity, OnStartTouch, false);
-    SH_ADD_MANUALHOOK_STATICFUNC(StartTouch, pEntity, OnPostStartTouch, true);
-    SH_ADD_MANUALHOOK_STATICFUNC(Touch, pEntity, OnTouch, false);
-    SH_ADD_MANUALHOOK_STATICFUNC(Touch, pEntity, OnPostTouch, true);
-    SH_ADD_MANUALHOOK_STATICFUNC(EndTouch, pEntity, OnEndTouch, false);
-    SH_ADD_MANUALHOOK_STATICFUNC(EndTouch, pEntity, OnPostEndTouch, true);
-    SH_ADD_MANUALHOOK_STATICFUNC(EntityUse, pEntity, OnUse, false);
-    SH_ADD_MANUALHOOK_STATICFUNC(EntityUse, pEntity, OnPostUse, true);
+    // SH_ADD_MANUALHOOK_STATICFUNC(StartTouch, pEntity, OnStartTouch, false);
+    // SH_ADD_MANUALHOOK_STATICFUNC(StartTouch, pEntity, OnPostStartTouch, true);
+    // SH_ADD_MANUALHOOK_STATICFUNC(Touch, pEntity, OnTouch, false);
+    // SH_ADD_MANUALHOOK_STATICFUNC(Touch, pEntity, OnPostTouch, true);
+    // SH_ADD_MANUALHOOK_STATICFUNC(EndTouch, pEntity, OnEndTouch, false);
+    // SH_ADD_MANUALHOOK_STATICFUNC(EndTouch, pEntity, OnPostEndTouch, true);
+    // SH_ADD_MANUALHOOK_STATICFUNC(EntityUse, pEntity, OnUse, false);
+    // SH_ADD_MANUALHOOK_STATICFUNC(EntityUse, pEntity, OnPostUse, true);
 }
 
 void CEntityListener::OnEntityDeleted(CEntityInstance* pEntity)
 {
-    SH_REMOVE_MANUALHOOK_STATICFUNC(StartTouch, pEntity, OnStartTouch, false);
-    SH_REMOVE_MANUALHOOK_STATICFUNC(StartTouch, pEntity, OnPostStartTouch, true);
-    SH_REMOVE_MANUALHOOK_STATICFUNC(Touch, pEntity, OnTouch, false);
-    SH_REMOVE_MANUALHOOK_STATICFUNC(Touch, pEntity, OnPostTouch, true);
-    SH_REMOVE_MANUALHOOK_STATICFUNC(EndTouch, pEntity, OnEndTouch, false);
-    SH_REMOVE_MANUALHOOK_STATICFUNC(EndTouch, pEntity, OnPostEndTouch, true);
-    SH_REMOVE_MANUALHOOK_STATICFUNC(EntityUse, pEntity, OnUse, false);
-    SH_REMOVE_MANUALHOOK_STATICFUNC(EntityUse, pEntity, OnPostUse, true);
 }
 
 void OnStartTouch(CEntityInstance* ent)
