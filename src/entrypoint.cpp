@@ -2,7 +2,7 @@
 #include "entities.h"
 #include "raytrace.h"
 
-#include <Embedder.h>
+#include <embedder/src/embedder.h>
 
 //////////////////////////////////////////////////////////////
 /////////////////        Core Variables        //////////////
@@ -13,18 +13,25 @@ SH_DECL_HOOK3_void(INetworkServerService, StartupServer, SH_NOATTRIB, 0, const G
 SDKTools g_Ext;
 EntityListener g_entListener;
 IVPhysics2* g_Physics = nullptr;
-CUtlVector<FuncHookBase *> g_vecHooks;
 CREATE_GLOBALVARS();
 
-void TraceShapeHook(IVPhysics2* _this, Ray_t& ray, Vector& start, Vector& end, CTraceFilter* filter, trace_t* trace);
-FuncHook<decltype(TraceShapeHook)> TTraceShape(TraceShapeHook, "TraceShape");
+dyno::ReturnAction TraceShapeHook(dyno::CallbackType cbType, dyno::IHook& hook);
+FunctionHook TraceShape("TraceShape", dyno::CallbackType::Pre, TraceShapeHook, "pppppppppppp", 'b');
 
 //////////////////////////////////////////////////////////////
 /////////////////          Core Class          //////////////
 ////////////////////////////////////////////////////////////
 
-void TraceShapeHook(IVPhysics2* _this, Ray_t& ray, Vector& start, Vector& end, CTraceFilter* filter, trace_t* trace)
+dyno::ReturnAction TraceShapeHook(dyno::CallbackType cbType, dyno::IHook& hook)
 {
+    /// IVPhysics2* _this, Ray_t& ray, Vector& start, Vector& end, CTraceFilter* filter, trace_t* trace
+    IVPhysics2* _this = hook.GetArgument<IVPhysics2*>(0);
+    Ray_t* ray = hook.GetArgument<Ray_t*>(1);
+    Vector* start = hook.GetArgument<Vector*>(2);
+    Vector* end = hook.GetArgument<Vector*>(3);
+    CTraceFilter* filter = hook.GetArgument<CTraceFilter*>(4);
+    trace_t* trace = hook.GetArgument<trace_t*>(5);
+    
     if(g_Physics == nullptr) {
         g_Physics = _this;
         TTraceShape(_this, ray, start, end, filter, trace);
@@ -38,11 +45,6 @@ bool SDKTools::Load(std::string& error, SourceHook::ISourceHook *SHPtr, ISmmAPI*
     SAVE_GLOBALVARS();
     
     GET_IFACE_ANY(GetEngineFactory, g_pNetworkServerService, INetworkServerService, NETWORKSERVERSERVICE_INTERFACE_VERSION);
-
-    if(!InitializeHooks()) {
-        error = "Failed to initialize hooks.";
-        return false;
-    }
 
     g_entListener.Initialize();
     return true;

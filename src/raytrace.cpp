@@ -4,245 +4,1032 @@
 
 void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
 {
-    BeginClass<bbox_t>("BBox", ctx)
-        .addConstructor<>()
-        .addProperty("mins", &bbox_t::mins)
-        .addProperty("maxs", &bbox_t::maxs)
-        .endClass();
 
-    BeginClass<CInternalTraceFilter>("CTraceFilter", ctx)
-        .addConstructor<>()
-        .addProperty("InteractsWith", &CInternalTraceFilter::m_nInteractsWith)
-        .addProperty("InteractsExclude", &CInternalTraceFilter::m_nInteractsExclude)
-        .addProperty("InteractsAs", &CInternalTraceFilter::m_nInteractsAs)
-        .addProperty("EntityIdsToIgnore", &CInternalTraceFilter::m_nEntityIdsToIgnore)
-        .addProperty("OwnerIdsToIgnore", &CInternalTraceFilter::m_nOwnerIdsToIgnore)
-        .addProperty("HierarchyIds", &CInternalTraceFilter::m_nHierarchyIds)
-        .addProperty("ObjectSetMask", &CInternalTraceFilter::m_nObjectSetMask)
-        .addProperty("CollisionGroup", &CInternalTraceFilter::m_nCollisionGroup)
-        .addProperty("HitSolid", &CInternalTraceFilter::m_bHitSolid)
-        .addProperty("HitSolidRequiresGenerateContacts", &CInternalTraceFilter::m_bHitSolidRequiresGenerateContacts)
-        .addProperty("HitTrigger", &CInternalTraceFilter::m_bHitTrigger)
-        .addProperty("ShouldIgnoreDisabledPairs", &CInternalTraceFilter::m_bShouldIgnoreDisabledPairs)
-        .addProperty("IgnoreIfBothInteractWithHitboxes", &CInternalTraceFilter::m_bIgnoreIfBothInteractWithHitboxes)
-        .addProperty("ForceHitEverything", &CInternalTraceFilter::m_bForceHitEverything)
-        .addProperty("Unknown", &CInternalTraceFilter::m_bUnknown)
-        .addProperty("IterateEntities", &CInternalTraceFilter::m_bIterateEntities)
-        .addFunction("Save", &CInternalTraceFilter::Save)
-        .endClass();
+    ADD_CLASS("BBox");
 
-    BeginClass<CPhysSurfacePropertiesPhysics>("CPhysSurfacePropertiesPhysics", ctx)
-        .addConstructor<>()
-        .addProperty("friction", &CPhysSurfacePropertiesPhysics::m_friction)
-        .addProperty("elasticity", &CPhysSurfacePropertiesPhysics::m_elasticity)
-        .addProperty("density", &CPhysSurfacePropertiesPhysics::m_density)
-        .addProperty("thickness", &CPhysSurfacePropertiesPhysics::m_thickness)
-        .addProperty("softContactFrequency", &CPhysSurfacePropertiesPhysics::m_softContactFrequency)
-        .addProperty("softContactDampingRatio", &CPhysSurfacePropertiesPhysics::m_softContactDampingRatio)
-        .addProperty("wheelDrag", &CPhysSurfacePropertiesPhysics::m_wheelDrag)
-        .endClass();
+    ADD_CLASS_FUNCTION("BBox", "BBox", [](FunctionContext* context, ClassData* data) -> void {
+        data->SetData("bbox_ptr", new bbox_t());
+    });
 
-    BeginClass<CPhysSurfacePropertiesAudio>("CPhysSurfacePropertiesAudio", ctx)
-        .addConstructor<>()
-        .addProperty("reflectivity", &CPhysSurfacePropertiesAudio::m_reflectivity)
-        .addProperty("hardnessFactor", &CPhysSurfacePropertiesAudio::m_hardnessFactor)
-        .addProperty("roughnessFactor", &CPhysSurfacePropertiesAudio::m_roughnessFactor)
-        .addProperty("roughThreshold", &CPhysSurfacePropertiesAudio::m_roughThreshold)
-        .addProperty("hardThreshold", &CPhysSurfacePropertiesAudio::m_hardThreshold)
-        .addProperty("hardVelocityThreshold", &CPhysSurfacePropertiesAudio::m_hardVelocityThreshold)
-        .addProperty("StaticImpactVolume", &CPhysSurfacePropertiesAudio::m_flStaticImpactVolume)
-        .addProperty("OcclusionFactor", &CPhysSurfacePropertiesAudio::m_flOcclusionFactor)
-        .endClass();
+    ADD_CLASS_FUNCTION("BBox", "~BBox", [](FunctionContext* context, ClassData* data) -> void {
+        if(data->HasData("bbox_ptr")) {
+            delete data->GetData<bbox_t*>("bbox_ptr");
+        }
+    });
 
-    BeginClass<CPhysSurfacePropertiesSoundNames>("CPhysSurfacePropertiesSoundNames", ctx)
-        .addConstructor<>()
-        .addProperty("impactSoft", &CPhysSurfacePropertiesSoundNames::m_impactSoft)
-        .addProperty("impactHard", &CPhysSurfacePropertiesSoundNames::m_impactHard)
-        .addProperty("scrapeSmooth", &CPhysSurfacePropertiesSoundNames::m_scrapeSmooth)
-        .addProperty("scrapeRough", &CPhysSurfacePropertiesSoundNames::m_scrapeRough)
-        .addProperty("bulletImpact", &CPhysSurfacePropertiesSoundNames::m_bulletImpact)
-        .addProperty("rolling", &CPhysSurfacePropertiesSoundNames::m_rolling)
-        .addProperty("break", &CPhysSurfacePropertiesSoundNames::m_break)
-        .addProperty("strain", &CPhysSurfacePropertiesSoundNames::m_strain)
-        .addProperty("meleeImpact", &CPhysSurfacePropertiesSoundNames::m_meleeImpact)
-        .addProperty("pushOff", &CPhysSurfacePropertiesSoundNames::m_pushOff)
-        .addProperty("skidStop", &CPhysSurfacePropertiesSoundNames::m_skidStop)
-        .endClass();
+    ADD_CLASS_MEMBER("BBox", "mins", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<bbox_t*>("bbox_ptr")->mins);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        Vector value = context->GetArgumentOr<Vector>(0, Vector(0.0,0.0,0.0));
+        data->GetData<bbox_t*>("bbox_ptr")->mins = value;
+    });
+    
+    ADD_CLASS_MEMBER("BBox", "maxs", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<bbox_t*>("bbox_ptr")->maxs);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        Vector value = context->GetArgumentOr<Vector>(0, Vector(0.0,0.0,0.0));
+        data->GetData<bbox_t*>("bbox_ptr")->maxs = value;
+    });
 
-    BeginClass<CPhysSurfaceProperties>("CPhysSurfaceProperties", ctx)
-        .addConstructor<>()
-        .addProperty("name", &CPhysSurfaceProperties::m_name)
-        .addProperty("nameHash", &CPhysSurfaceProperties::m_nameHash)
-        .addProperty("baseNameHash", &CPhysSurfaceProperties::m_baseNameHash)
-        .addProperty("ListIndex", &CPhysSurfaceProperties::m_nListIndex)
-        .addProperty("BaseListIndex", &CPhysSurfaceProperties::m_nBaseListIndex)
-        .addProperty("Hidden", &CPhysSurfaceProperties::m_bHidden)
-        .addProperty("description", &CPhysSurfaceProperties::m_description)
-        .addProperty("physics", &CPhysSurfaceProperties::m_physics)
-        .addProperty("audioSounds", &CPhysSurfaceProperties::m_audioSounds)
-        .addProperty("audioParams", &CPhysSurfaceProperties::m_audioParams)
-        .endClass();
+    ADD_CLASS("CTraceFilter");
 
-    BeginClass<CHitBox>("CHitBox", ctx)
-        .addConstructor<>()
-        .addProperty("name", &CHitBox::m_name)
-        .addProperty("SurfaceProperty", &CHitBox::m_sSurfaceProperty)
-        .addProperty("BoneName", &CHitBox::m_sBoneName)
-        .addProperty("MinBounds", &CHitBox::m_vMinBounds)
-        .addProperty("MaxBounds", &CHitBox::m_vMaxBounds)
-        .addProperty("ShapeRadius", &CHitBox::m_flShapeRadius)
-        .addProperty("BoneNameHash", &CHitBox::m_nBoneNameHash)
-        .addProperty("GroupId", &CHitBox::m_nGroupId)
-        .addProperty("ShapeType", &CHitBox::m_nShapeType)
-        .addProperty("TranslationOnly", &CHitBox::m_bTranslationOnly)
-        .addProperty("CRC", &CHitBox::m_CRC)
-        .addProperty("RenderColor", &CHitBox::m_cRenderColor)
-        .addProperty("HitBoxIndex", &CHitBox::m_nHitBoxIndex)
-        .addProperty("ShouldForceTransform", &CHitBox::m_bForcedTransform)
-        .endClass();
+    ADD_CLASS_FUNCTION("CTraceFilter", "CTraceFilter", [](FunctionContext* context, ClassData* data) -> void {
+        data->SetData("ctracefilter_ptr", new CInternalTraceFilter());
+    });
 
-    BeginClass<RnCollisionAttr_t>("RnCollisionAttr_t", ctx)
-        .addConstructor<>()
-        .addProperty("InteractsAs", &RnCollisionAttr_t::m_nInteractsAs)
-        .addProperty("InteractsWith", &RnCollisionAttr_t::m_nInteractsWith)
-        .addProperty("InteractsExclude", &RnCollisionAttr_t::m_nInteractsExclude)
-        .addProperty("EntityId", &RnCollisionAttr_t::m_nEntityId)
-        .addProperty("OwnerId", &RnCollisionAttr_t::m_nOwnerId)
-        .addProperty("HierarchyId", &RnCollisionAttr_t::m_nHierarchyId)
-        .addProperty("CollisionGroup", &RnCollisionAttr_t::m_nCollisionGroup)
-        .addProperty("CollisionFunctionMask", &RnCollisionAttr_t::m_nCollisionFunctionMask)
-        .endClass();
+    ADD_CLASS_FUNCTION("CTraceFilter", "~CTraceFilter", [](FunctionContext* context, ClassData* data) -> void {
+        if(data->HasData("ctracefilter_ptr")) {
+            delete data->GetData<CInternalTraceFilter*>("ctracefilter_ptr");
+        }
+    });
 
-    BeginClass<CGameTraceInternal>("trace_t", ctx)
-        .addConstructor<>()
-        .addProperty("SurfaceProperties", &CGameTraceInternal::m_pSurfaceProperties)
-        .addProperty("Hitbox", &CGameTraceInternal::m_pHitbox)
-        .addProperty("Contents", &CGameTraceInternal::m_nContents)
-        .addProperty("ShapeAttributes", &CGameTraceInternal::m_ShapeAttributes)
-        .addProperty("StartPos", &CGameTraceInternal::m_vStartPos)
-        .addProperty("EndPos", &CGameTraceInternal::m_vEndPos)
-        .addProperty("HitNormal", &CGameTraceInternal::m_vHitNormal)
-        .addProperty("HitPoint", &CGameTraceInternal::m_vHitPoint)
-        .addProperty("HitOffset", &CGameTraceInternal::m_flHitOffset)
-        .addProperty("Fraction", &CGameTraceInternal::m_flFraction)
-        .addProperty("Triangle", &CGameTraceInternal::m_nTriangle)
-        .addProperty("HitboxBoneIndex", &CGameTraceInternal::m_nHitboxBoneIndex)
-        .addProperty("RayType", &CGameTraceInternal::m_eRayType)
-        .addProperty("StartInSolid", &CGameTraceInternal::m_bStartInSolid)
-        .addProperty("ExactHitPoint", &CGameTraceInternal::m_bExactHitPoint)
-        .addFunction("GetEntity", &CGameTraceInternal::GetEntity)
-        .addFunction("SyncToTrace", &CGameTraceInternal::SyncToTrace)
-        .addFunction("SyncFromTrace", &CGameTraceInternal::SyncFromTrace)
-        .addFunction("GetRawTrace", &CGameTraceInternal::GetRawTracePtr)
-        .endClass();
+    ADD_CLASS_MEMBER("CTraceFilter", "InteractsWith", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nInteractsWith);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint64_t value = context->GetArgumentOr<uint64_t>(0, "");
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nInteractsWith = value;
+    });
 
-    BeginClass<InternalRay_t>("Ray_t", ctx)
-        .addConstructor<>()
-        .addFunction("InitLine", &InternalRay_t::InitLine)
-        .addFunction("InitSphere", &InternalRay_t::InitSphere)
-        .addFunction("InitHull", &InternalRay_t::InitHull)
-        .addFunction("InitCapsule", &InternalRay_t::InitCapsule)
-        .addFunction("InitMesh", &InternalRay_t::InitMesh)
-        .addFunction("GetRayPtr", &InternalRay_t::GetRayPtr)
-        .addFunction("GetType", &InternalRay_t::GetType)
-        .endClass();
+    ADD_CLASS_MEMBER("CTraceFilter", "InteractsExclude", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nInteractsExclude);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint64_t value = context->GetArgumentOr<uint64_t>(0, "");
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nInteractsExclude = value;
+    });
 
-    BeginClass<RayTrace>("RayTrace", ctx)
-        .addConstructor<std::string>()
-        .addFunction("TracePlayerBBox", &RayTrace::TracePlayerBBox)
-        .addFunction("TraceShape", &RayTrace::TraceShape)
-        .endClass();
+    ADD_CLASS_MEMBER("CTraceFilter", "InteractsAs", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nInteractsAs);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint64_t value = context->GetArgumentOr<uint64_t>(0, "");
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nInteractsAs = value;
+    });
 
-    GetGlobalNamespace(ctx)
-        .beginNamespace("RayType_t")
-        .addConstant("RAY_TYPE_LINE", (uint64_t)RayType_t::RAY_TYPE_LINE)
-        .addConstant("RAY_TYPE_SPHERE", (uint64_t)RayType_t::RAY_TYPE_SPHERE)
-        .addConstant("RAY_TYPE_HULL", (uint64_t)RayType_t::RAY_TYPE_HULL)
-        .addConstant("RAY_TYPE_CAPSULE", (uint64_t)RayType_t::RAY_TYPE_CAPSULE)
-        .addConstant("RAY_TYPE_MESH", (uint64_t)RayType_t::RAY_TYPE_MESH)
-        .endNamespace()
-        .beginNamespace("CollisionFunctionMask_t")
-        .addConstant("FCOLLISION_FUNC_ENABLE_SOLID_CONTACT", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_SOLID_CONTACT)
-        .addConstant("FCOLLISION_FUNC_ENABLE_TRACE_QUERY", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_TRACE_QUERY)
-        .addConstant("FCOLLISION_FUNC_ENABLE_TOUCH_EVENT", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_TOUCH_EVENT)
-        .addConstant("FCOLLISION_FUNC_ENABLE_SELF_COLLISIONS", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_SELF_COLLISIONS)
-        .addConstant("FCOLLISION_FUNC_IGNORE_FOR_HITBOX_TEST", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_IGNORE_FOR_HITBOX_TEST)
-        .addConstant("FCOLLISION_FUNC_ENABLE_TOUCH_PERSISTS", (uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_TOUCH_PERSISTS)
-        .endNamespace()
-        .beginNamespace("RnQueryObjectSet")
-        .addConstant("RNQUERY_OBJECTS_STATIC", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_STATIC)
-        .addConstant("RNQUERY_OBJECTS_DYNAMIC", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_DYNAMIC)
-        .addConstant("RNQUERY_OBJECTS_NON_COLLIDEABLE", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_NON_COLLIDEABLE)
-        .addConstant("RNQUERY_OBJECTS_KEYFRAMED_ONLY", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_KEYFRAMED_ONLY)
-        .addConstant("RNQUERY_OBJECTS_DYNAMIC_ONLY", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_DYNAMIC_ONLY)
-        .addConstant("RNQUERY_OBJECTS_ALL_GAME_ENTITIES", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_ALL_GAME_ENTITIES)
-        .addConstant("RNQUERY_OBJECTS_ALL", (uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_ALL)
-        .endNamespace()
-        .beginNamespace("HitboxShapeType_t")
-        .addConstant("HITBOX_SHAPE_HULL", (uint64_t)HitboxShapeType_t::HITBOX_SHAPE_HULL)
-        .addConstant("HITBOX_SHAPE_SPHERE", (uint64_t)HitboxShapeType_t::HITBOX_SHAPE_SPHERE)
-        .addConstant("HITBOX_SHAPE_CAPSULE", (uint64_t)HitboxShapeType_t::HITBOX_SHAPE_CAPSULE)
-        .endNamespace()
-        .beginNamespace("TraceMask")
-        .addConstant("MASK_ALL", (uint64_t)MASK_ALL)
-        .addConstant("MASK_SOLID", (uint64_t)MASK_SOLID)
-        .addConstant("MASK_PLAYERSOLID", (uint64_t)MASK_PLAYERSOLID)
-        .addConstant("MASK_NPCSOLID", (uint64_t)MASK_NPCSOLID)
-        .addConstant("MASK_NPCFLUID", (uint64_t)MASK_NPCFLUID)
-        .addConstant("MASK_WATER", (uint64_t)MASK_WATER)
-        .addConstant("MASK_SHOT", (uint64_t)MASK_SHOT)
-        .addConstant("MASK_SHOT_BRUSHONLY", (uint64_t)MASK_SHOT_BRUSHONLY)
-        .addConstant("MASK_SHOT_HULL", (uint64_t)MASK_SHOT_HULL)
-        .addConstant("MASK_SHOT_PORTAL", (uint64_t)MASK_SHOT_PORTAL)
-        .addConstant("MASK_SOLID_BRUSHONLY", (uint64_t)MASK_SOLID_BRUSHONLY)
-        .addConstant("MASK_PLAYERSOLID_BRUSHONLY", (uint64_t)MASK_PLAYERSOLID_BRUSHONLY)
-        .addConstant("MASK_NPCSOLID_BRUSHONLY", (uint64_t)MASK_NPCSOLID_BRUSHONLY)
-        .endNamespace()
-        .beginNamespace("MaskContents")
-        .addConstant("CONTENTS_EMPTY", (uint64_t)CONTENTS_EMPTY)
-        .addConstant("CONTENTS_SOLID", (uint64_t)CONTENTS_SOLID)
-        .addConstant("CONTENTS_HITBOX", (uint64_t)CONTENTS_HITBOX)
-        .addConstant("CONTENTS_TRIGGER", (uint64_t)CONTENTS_TRIGGER)
-        .addConstant("CONTENTS_SKY", (uint64_t)CONTENTS_SKY)
-        .addConstant("CONTENTS_PLAYER_CLIP", (uint64_t)CONTENTS_PLAYER_CLIP)
-        .addConstant("CONTENTS_NPC_CLIP", (uint64_t)CONTENTS_NPC_CLIP)
-        .addConstant("CONTENTS_BLOCK_LOS", (uint64_t)CONTENTS_BLOCK_LOS)
-        .addConstant("CONTENTS_BLOCK_LIGHT", (uint64_t)CONTENTS_BLOCK_LIGHT)
-        .addConstant("CONTENTS_LADDER", (uint64_t)CONTENTS_LADDER)
-        .addConstant("CONTENTS_PICKUP", (uint64_t)CONTENTS_PICKUP)
-        .addConstant("CONTENTS_BLOCK_SOUND", (uint64_t)CONTENTS_BLOCK_SOUND)
-        .addConstant("CONTENTS_NODRAW", (uint64_t)CONTENTS_NODRAW)
-        .addConstant("CONTENTS_WINDOW", (uint64_t)CONTENTS_WINDOW)
-        .addConstant("CONTENTS_PASS_BULLETS", (uint64_t)CONTENTS_PASS_BULLETS)
-        .addConstant("CONTENTS_WORLD_GEOMETRY", (uint64_t)CONTENTS_WORLD_GEOMETRY)
-        .addConstant("CONTENTS_WATER", (uint64_t)CONTENTS_WATER)
-        .addConstant("CONTENTS_SLIME", (uint64_t)CONTENTS_SLIME)
-        .addConstant("CONTENTS_TOUCH_ALL", (uint64_t)CONTENTS_TOUCH_ALL)
-        .addConstant("CONTENTS_PLAYER", (uint64_t)CONTENTS_PLAYER)
-        .addConstant("CONTENTS_NPC", (uint64_t)CONTENTS_NPC)
-        .addConstant("CONTENTS_DEBRIS", (uint64_t)CONTENTS_DEBRIS)
-        .addConstant("CONTENTS_PHYSICS_PROP", (uint64_t)CONTENTS_PHYSICS_PROP)
-        .addConstant("CONTENTS_NAV_IGNORE", (uint64_t)CONTENTS_NAV_IGNORE)
-        .addConstant("CONTENTS_NAV_LOCAL_IGNORE", (uint64_t)CONTENTS_NAV_LOCAL_IGNORE)
-        .addConstant("CONTENTS_POST_PROCESSING_VOLUME", (uint64_t)CONTENTS_POST_PROCESSING_VOLUME)
-        .addConstant("CONTENTS_UNUSED_LAYER3", (uint64_t)CONTENTS_UNUSED_LAYER3)
-        .addConstant("CONTENTS_CARRIED_OBJECT", (uint64_t)CONTENTS_CARRIED_OBJECT)
-        .addConstant("CONTENTS_PUSHAWAY", (uint64_t)CONTENTS_PUSHAWAY)
-        .addConstant("CONTENTS_SERVER_ENTITY_ON_CLIENT", (uint64_t)CONTENTS_SERVER_ENTITY_ON_CLIENT)
-        .addConstant("CONTENTS_CARRIED_WEAPON", (uint64_t)CONTENTS_CARRIED_WEAPON)
-        .addConstant("CONTENTS_STATIC_LEVEL", (uint64_t)CONTENTS_STATIC_LEVEL)
-        .addConstant("CONTENTS_CSGO_TEAM1", (uint64_t)CONTENTS_CSGO_TEAM1)
-        .addConstant("CONTENTS_CSGO_TEAM2", (uint64_t)CONTENTS_CSGO_TEAM2)
-        .addConstant("CONTENTS_CSGO_GRENADE_CLIP", (uint64_t)CONTENTS_CSGO_GRENADE_CLIP)
-        .addConstant("CONTENTS_CSGO_DRONE_CLIP", (uint64_t)CONTENTS_CSGO_DRONE_CLIP)
-        .addConstant("CONTENTS_CSGO_MOVEABLE", (uint64_t)CONTENTS_CSGO_MOVEABLE)
-        .addConstant("CONTENTS_CSGO_OPAQUE", (uint64_t)CONTENTS_CSGO_OPAQUE)
-        .addConstant("CONTENTS_CSGO_MONSTER", (uint64_t)CONTENTS_CSGO_MONSTER)
-        .addConstant("CONTENTS_CSGO_UNUSED_LAYER", (uint64_t)CONTENTS_CSGO_UNUSED_LAYER)
-        .addConstant("CONTENTS_CSGO_THROWN_GRENADE", (uint64_t)CONTENTS_CSGO_THROWN_GRENADE)
-        .endNamespace();
+    ADD_CLASS_MEMBER("CTraceFilter", "EntityIdsToIgnore", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nEntityIdsToIgnore);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        std::vector<uint32_t> value = context->GetArgumentOr<std::vector<uint32_t>>(0, std::vector<uint32_t>{});
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nEntityIdsToIgnore = value;
+    });
 
-    GetGlobalNamespace(ctx).addConstant("raytrace", RayTrace(plugin_name));
+    ADD_CLASS_MEMBER("CTraceFilter", "OwnerIdsToIgnore", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nOwnerIdsToIgnore);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        std::vector<uint32_t> value = context->GetArgumentOr<std::vector<uint32_t>>(0, std::vector<uint32_t>{});
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nOwnerIdsToIgnore = value;
+    });
+
+    ADD_CLASS_MEMBER("CTraceFilter", "HierarchyIds", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nHierarchyIds);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        std::vector<uint32_t> value = context->GetArgumentOr<std::vector<uint32_t>>(0, std::vector<uint32_t>{});
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nHierarchyIds = value;
+    });
+
+    ADD_CLASS_MEMBER("CTraceFilter", "ObjectSetMask", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nObjectSetMask);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint16_t value = context->GetArgumentOr<uint16_t>(0, 0);
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nObjectSetMask = value;
+    });
+
+    ADD_CLASS_MEMBER("CTraceFilter", "CollisionGroup", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nCollisionGroup);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint32_t value = context->GetArgumentOr<uint32_t>(0, 0);
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nCollisionGroup = value;
+    });
+
+    ADD_CLASS_MEMBER("CTraceFilter", "HitSolid", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_bHitSolid);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        bool value = context->GetArgumentOr<bool>(0, false);
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_bHitSolid = value;
+    });
+
+    ADD_CLASS_MEMBER("CTraceFilter", "HitSolidRequiresGenerateContacts", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_bHitSolidRequiresGenerateContacts);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        bool value = context->GetArgumentOr<bool>(0, false);
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_bHitSolidRequiresGenerateContacts = value;
+    });
+
+    ADD_CLASS_MEMBER("CTraceFilter", "HitTrigger", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nCollisionGroup);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        bool value = context->GetArgumentOr<bool>(0, false);
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_bHitTrigger = value;
+    });
+
+    ADD_CLASS_MEMBER("CTraceFilter", "ShouldIgnoreDisabledPairs", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_bShouldIgnoreDisabledPairs);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        bool value = context->GetArgumentOr<bool>(0, false);
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_bShouldIgnoreDisabledPairs = value;
+    });
+
+    ADD_CLASS_MEMBER("CTraceFilter", "IgnoreIfBothInteractWithHitboxes", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_bIgnoreIfBothInteractWithHitboxes);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        bool value = context->GetArgumentOr<bool>(0, false);
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_bIgnoreIfBothInteractWithHitboxes = value;
+    });
+
+    ADD_CLASS_MEMBER("CTraceFilter", "ForceHitEverything", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_bForceHitEverything);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        bool value = context->GetArgumentOr<bool>(0, false);
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_bForceHitEverything = value;
+    });
+
+    ADD_CLASS_MEMBER("CTraceFilter", "Unknown", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_bUnknown);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        bool value = context->GetArgumentOr<bool>(0, false);
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_bUnknown = value;
+    });
+
+    ADD_CLASS_MEMBER("CTraceFilter", "IterateEntities", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_bIterateEntities);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        bool value = context->GetArgumentOr<bool>(0, false);
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_bIterateEntities = value;
+    });
+
+    ADD_CLASS_FUNCTION("CTraceFilter", "Save", [](FunctionContext* context, ClassData* data) -> void {
+        data->GetData<InternalCTraceFilter*>("CTraceFilter")->Save();
+    });
+
+    ADD_CLASS("CPhysSurfacePropertiesPhysics");
+
+    ADD_CLASS_FUNCTION("CPhysSurfacePropertiesPhysics", "CPhysSurfacePropertiesPhysics", [](FunctionContext* context, ClassData* data) -> void {
+        data->SetData("cphyssurfacepropertiesphysics_ptr", new CPhysSurfacePropertiesPhysics());
+    });
+
+    ADD_CLASS_FUNCTION("CPhysSurfacePropertiesPhysics", "~CPhysSurfacePropertiesPhysics", [](FunctionContext* context, ClassData* data) -> void {
+        if(data->HasData("cphyssurfacepropertiesphysics_ptr")) {
+            delete data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr");
+        }
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesPhysics", "friction", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_friction);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_friction = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesPhysics", "elasticity", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_elasticity);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_elasticity = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesPhysics", "density", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_density);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_density = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesPhysics", "thickness", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_thickness);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_thickness = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesPhysics", "softContactFrequency", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_softContactFrequency);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_softContactFrequency = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesPhysics", "softContactDampingRatio", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_softContactDampingRatio);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_softContactDampingRatio = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesPhysics", "wheelDrag", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_wheelDrag);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_wheelDrag = value;
+    });
+
+    ADD_CLASS("CPhysSurfacePropertiesAudio");
+
+    ADD_CLASS_FUNCTION("CPhysSurfacePropertiesAudio", "CPhysSurfacePropertiesAudio", [](FunctionContext* context, ClassData* data) -> void {
+        data->SetData("cphyssurfacepropertiesaudio_ptr", new CPhysSurfacePropertiesAudio());
+    });
+
+    ADD_CLASS_FUNCTION("CPhysSurfacePropertiesAudio", "~CPhysSurfacePropertiesAudio", [](FunctionContext* context, ClassData* data) -> void {
+        if(data->HasData("cphyssurfacepropertiesaudio_ptr")) {
+            delete data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr");
+        }
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesAudio", "reflectivity", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr")->m_reflectivity);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr")->m_reflectivity = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesAudio", "hardnessFactor", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr")->m_hardnessFactor);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr")->m_hardnessFactor = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesAudio", "roughnessFactor", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr")->m_roughnessFactor);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr")->m_roughnessFactor = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesAudio", "roughThreshold", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr")->m_roughThreshold);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr")->m_roughThreshold = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesAudio", "hardThreshold", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr")->m_hardThreshold);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr")->m_hardThreshold = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesAudio", "hardVelocityThreshold", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr")->m_hardVelocityThreshold);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr")->m_hardVelocityThreshold = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesAudio", "StaticImpactVolume", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr")->m_flStaticImpactVolume);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr")->m_flStaticImpactVolume = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesAudio", "OcclusionFactor", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr")->m_flOcclusionFactor);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesAudio*>("cphyssurfacepropertiesaudio_ptr")->m_flOcclusionFactor = value;
+    });
+
+    ADD_CLASS("CPhysSurfacePropertiesSoundNames");
+
+    ADD_CLASS_FUNCTION("CPhysSurfacePropertiesSoundNames", "CPhysSurfacePropertiesSoundNames", [](FunctionContext* context, ClassData* data) -> void {
+        data->SetData("cphyssurfacepropertiessoundnames_ptr", new CPhysSurfacePropertiesSoundNames());
+    });
+
+    ADD_CLASS_FUNCTION("CPhysSurfacePropertiesSoundNames", "~CPhysSurfacePropertiesSoundNames", [](FunctionContext* context, ClassData* data) -> void {
+        if(data->HasData("cphyssurfacepropertiessoundnames_ptr")) {
+            delete data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiessoundnames_ptr");
+        }
+    });
+
+    /*
+    /// ALL FROM ABOVE CUTLSTRING, GL SKUZZIADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "impactSoft", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_impactSoft);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_impactSoft = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "impactHard", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_impactHard);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_impactHard = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "scrapeSmooth", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_scrapeSmooth);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_scrapeSmooth = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "scrapeRough", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_scrapeRough);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_scrapeRough = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "bulletImpact", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_bulletImpact);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_bulletImpact = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "rolling", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_rolling);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_rolling = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "break", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_break);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_break = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "strain", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_strain);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_strain = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "meleeImpact", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_meleeImpact);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_meleeImpact = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "pushOff", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_pushOff);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_pushOff = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "skidStop", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_skidStop);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_skidStop = value;
+    });*/
+    /// ALL FROM ABOVE CUTLSTRING, GL SKUZZI
+
+    ADD_CLASS("CPhysSurfaceProperties");
+
+    ADD_CLASS_FUNCTION("CPhysSurfaceProperties", "CPhysSurfaceProperties", [](FunctionContext* context, ClassData* data) -> void {
+        data->SetData("cphyssurfaceproperties_ptr", new CPhysSurfaceProperties());
+    });
+
+    ADD_CLASS_FUNCTION("CPhysSurfaceProperties", "~CPhysSurfaceProperties", [](FunctionContext* context, ClassData* data) -> void {
+        if(data->HasData("cphyssurfaceproperties_ptr")) {
+            delete data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr");
+        }
+    });
+
+    /*ADD_CLASS_MEMBER("CPhysSurfaceProperties", "name", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_name);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_name = value;
+    });*/ /// CUtlString
+
+    ADD_CLASS_MEMBER("CPhysSurfaceProperties", "nameHash", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_nameHash);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint32 value = context->GetArgumentOr<uint32>(0, 0);
+        data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_nameHash = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfaceProperties", "baseNameHash", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_baseNameHash);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint32 value = context->GetArgumentOr<uint32>(0, 0);
+        data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_baseNameHash = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfaceProperties", "ListIndex", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_nListIndex);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        int32 value = context->GetArgumentOr<int32>(0, 0);
+        data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_nListIndex = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfaceProperties", "BaseListIndex", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_nBaseListIndex);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        int32 value = context->GetArgumentOr<int32>(0, 0);
+        data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_nBaseListIndex = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfaceProperties", "Hidden", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_bHidden);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        bool value = context->GetArgumentOr<bool>(0, 0);
+        data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_bHidden = value;
+    });
+
+    /*ADD_CLASS_MEMBER("CPhysSurfaceProperties", "description", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_description);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_description = value;
+    });*/ ///CUtlString
+
+    /*ADD_CLASS_MEMBER("CPhysSurfaceProperties", "physics", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_physics);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_physics = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfaceProperties", "audioSounds", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_audioSounds);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_audioSounds = value;
+    });
+
+    ADD_CLASS_MEMBER("CPhysSurfaceProperties", "audioParams", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_audioParams);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_audioParams = value;
+    });*/ /// CPhysSurfacePropertiesPhysics, CPhysSurfacePropertiesSoundNames, CPhysSurfacePropertiesAudio, ALL IN ORDER
+
+    ADD_CLASS("CHitBox");
+
+    ADD_CLASS_FUNCTION("CHitBox", "CHitBox", [](FunctionContext* context, ClassData* data) -> void {
+        data->SetData("chitbox_ptr", new CHitBox());
+    });
+
+    ADD_CLASS_FUNCTION("CHitBox", "~CHitBox", [](FunctionContext* context, ClassData* data) -> void {
+        if(data->HasData("chitbox_ptr")) {
+            delete data->GetData<CHitBox*>("chitbox_ptr");
+        }
+    });
+
+    // ADD_CLASS_MEMBER("CHitBox", "name", [](FunctionContext* context, ClassData* data) -> void {
+    //     context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_name);
+    // },
+    // [](FunctionContext* context, ClassData* data) -> void {
+    //     int32 value = context->GetArgumentOr<int32>(0, 0);
+    //     data->GetData<CHitBox*>("chitbox_ptr")->m_name = value;
+    // });
+
+
+    // ADD_CLASS_MEMBER("CHitBox", "SurfaceProperty", [](FunctionContext* context, ClassData* data) -> void {
+    //     context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_sSurfaceProperty);
+    // },
+    // [](FunctionContext* context, ClassData* data) -> void {
+    //     int32 value = context->GetArgumentOr<int32>(0, 0);
+    //     data->GetData<CHitBox*>("chitbox_ptr")->m_sSurfaceProperty = value;
+    // });
+
+
+    // ADD_CLASS_MEMBER("CHitBox", "BoneName", [](FunctionContext* context, ClassData* data) -> void {
+    //     context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_sBoneName);
+    // },
+    // [](FunctionContext* context, ClassData* data) -> void {
+    //     int32 value = context->GetArgumentOr<int32>(0, 0);
+    //     data->GetData<CHitBox*>("chitbox_ptr")->m_sBoneName = value;
+    // });
+    //// TILL BoneName, ALL CUtlString
+
+    ADD_CLASS_MEMBER("CHitBox", "MinBounds", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_vMinBounds);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        Vector value = context->GetArgumentOr<Vector>(0, Vector(0.0,0.0,0.0));
+        data->GetData<CHitBox*>("chitbox_ptr")->m_vMinBounds = value;
+    });
+
+
+    ADD_CLASS_MEMBER("CHitBox", "MaxBounds", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_vMaxBounds);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        Vector value = context->GetArgumentOr<Vector>(0, Vector(0.0,0.0,0.0));
+        data->GetData<CHitBox*>("chitbox_ptr")->m_vMaxBounds = value;
+    });
+
+
+    ADD_CLASS_MEMBER("CHitBox", "ShapeRadius", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_flShapeRadius);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CHitBox*>("chitbox_ptr")->m_flShapeRadius = value;
+    });
+
+
+    // ADD_CLASS_MEMBER("CHitBox", "BoneNameHash", [](FunctionContext* context, ClassData* data) -> void {
+    //     context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_nBoneNameHash);
+    // },
+    // [](FunctionContext* context, ClassData* data) -> void {
+    //     int32 value = context->GetArgumentOr<int32>(0, 0);
+    //     data->GetData<CHitBox*>("chitbox_ptr")->m_nBoneNameHash = value;
+    // }); /// CUtlStringToken
+
+
+    ADD_CLASS_MEMBER("CHitBox", "GroupId", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_nGroupId);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        int32 value = context->GetArgumentOr<int32>(0, 0);
+        data->GetData<CHitBox*>("chitbox_ptr")->m_nGroupId = value;
+    });
+
+
+    ADD_CLASS_MEMBER("CHitBox", "ShapeType", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_nShapeType);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint8 value = context->GetArgumentOr<uint8>(0, 0);
+        data->GetData<CHitBox*>("chitbox_ptr")->m_nShapeType = value;
+    });
+
+
+    ADD_CLASS_MEMBER("CHitBox", "TranslationOnly", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_bTranslationOnly);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        bool value = context->GetArgumentOr<bool>(0, false);
+        data->GetData<CHitBox*>("chitbox_ptr")->m_bTranslationOnly = value;
+    });
+
+
+    ADD_CLASS_MEMBER("CHitBox", "CRC", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_CRC);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint32 value = context->GetArgumentOr<uint32>(0, 0);
+        data->GetData<CHitBox*>("chitbox_ptr")->m_CRC = value;
+    });
+
+
+    // ADD_CLASS_MEMBER("CHitBox", "RenderColor", [](FunctionContext* context, ClassData* data) -> void {
+    //     context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_cRenderColor);
+    // },
+    // [](FunctionContext* context, ClassData* data) -> void {
+    //     int32 value = context->GetArgumentOr<int32>(0, 0);
+    //     data->GetData<CHitBox*>("chitbox_ptr")->m_cRenderColor = value;
+    // }); /// Color
+
+
+    ADD_CLASS_MEMBER("CHitBox", "HitBoxIndex", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_nHitBoxIndex);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint16 value = context->GetArgumentOr<uint16>(0, 0);
+        data->GetData<CHitBox*>("chitbox_ptr")->m_nHitBoxIndex = value;
+    });
+
+
+    ADD_CLASS_MEMBER("CHitBox", "ShouldForceTransform", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_bForcedTransform);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        bool value = context->GetArgumentOr<bool>(0, false);
+        data->GetData<CHitBox*>("chitbox_ptr")->m_bForcedTransform = value;
+    });
+
+    ADD_CLASS("RnCollisionAttr_t");
+
+    ADD_CLASS_FUNCTION("RnCollisionAttr_t", "RnCollisionAttr_t", [](FunctionContext* context, ClassData* data) -> void {
+        data->SetData("rncollisionattr_t_ptr", new RnCollisionAttr_t());
+    });
+
+    ADD_CLASS_FUNCTION("RnCollisionAttr_t", "~RnCollisionAttr_t", [](FunctionContext* context, ClassData* data) -> void {
+        if(data->HasData("rncollisionattr_t_ptr")) {
+            delete data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr");
+        }
+    });
+
+    ADD_CLASS_MEMBER("RnCollisionAttr_t", "InteractsAs", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr")->m_nInteractsAs);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint64 value = context->GetArgumentOr<uint64>(0, 0);
+        data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr")->m_nInteractsAs = value;
+    });
+
+    ADD_CLASS_MEMBER("RnCollisionAttr_t", "InteractsWith", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr")->m_nInteractsWith);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint64 value = context->GetArgumentOr<uint64>(0, 0);
+        data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr")->m_nInteractsWith = value;
+    });
+
+    ADD_CLASS_MEMBER("RnCollisionAttr_t", "InteractsExclude", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr")->m_nInteractsExclude);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint64 value = context->GetArgumentOr<uint64>(0, 0);
+        data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr")->m_nInteractsExclude = value;
+    });
+
+    ADD_CLASS_MEMBER("RnCollisionAttr_t", "EntityId", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr")->m_nEntityId);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint32 value = context->GetArgumentOr<uint32>(0, 0);
+        data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr")->m_nEntityId = value;
+    });
+
+    ADD_CLASS_MEMBER("RnCollisionAttr_t", "OwnerId", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr")->m_nOwnerId);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint32 value = context->GetArgumentOr<uint32>(0, 0);
+        data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr")->m_nOwnerId = value;
+    });
+
+    ADD_CLASS_MEMBER("RnCollisionAttr_t", "HierarchyId", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr")->m_nHierarchyId);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint16 value = context->GetArgumentOr<uint16>(0, 0);
+        data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr")->m_nHierarchyId = value;
+    });
+
+    ADD_CLASS_MEMBER("RnCollisionAttr_t", "CollisionGroup", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr")->m_nCollisionGroup);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint8 value = context->GetArgumentOr<uint8>(0, 0);
+        data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr")->m_nCollisionGroup = value;
+    });
+
+    ADD_CLASS_MEMBER("RnCollisionAttr_t", "CollisionFunctionMask", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr")->m_nCollisionFunctionMask);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint8 value = context->GetArgumentOr<uint8>(0, 0);
+        data->GetData<RnCollisionAttr_t*>("rncollisionattr_t_ptr")->m_nCollisionFunctionMask = value;
+    });
+
+    ADD_CLASS("trace_t");
+
+    ADD_CLASS_FUNCTION("trace_t", "trace_t", [](FunctionContext* context, ClassData* data) -> void {
+        data->SetData("cgametraceinternal_ptr", new CGameTraceInternal());
+    });
+
+    ADD_CLASS_FUNCTION("trace_t", "~trace_t", [](FunctionContext* context, ClassData* data) -> void {
+        if(data->HasData("cgametraceinternal_ptr")) {
+            delete data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr");
+        }
+    });
+
+    /*ADD_CLASS_MEMBER("trace_t", "SurfaceProperties", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_pSurfaceProperties);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint8 value = context->GetArgumentOr<uint8>(0, 0);
+        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_pSurfaceProperties = value;
+    });*/ /// CPhysSurfaceProperties
+
+    /*ADD_CLASS_MEMBER("trace_t", "Hitbox", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_pHitbox);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint8 value = context->GetArgumentOr<uint8>(0, 0);
+        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_pHitbox = value;
+    });*/ /// CHitBox
+
+    ADD_CLASS_MEMBER("trace_t", "Contents", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_nContents);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint64 value = context->GetArgumentOr<uint64>(0, 0);
+        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_nContents = value;
+    });
+
+    /*ADD_CLASS_MEMBER("trace_t", "ShapeAttributes", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_ShapeAttributes);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint8 value = context->GetArgumentOr<uint8>(0, 0);
+        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_ShapeAttributes = value;
+    });*/ /// RnCollisionAttr_t
+
+    ADD_CLASS_MEMBER("trace_t", "StartPos", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_vStartPos);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        Vector value = context->GetArgumentOr<Vector>(0, Vector(0.0,0.0,0.0));
+        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_vStartPos = value;
+    });
+
+    ADD_CLASS_MEMBER("trace_t", "EndPos", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_vEndPos);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        Vector value = context->GetArgumentOr<Vector>(0, Vector(0.0,0.0,0.0));
+        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_vEndPos = value;
+    });
+
+    ADD_CLASS_MEMBER("trace_t", "HitNormal", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_vHitNormal);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        Vector value = context->GetArgumentOr<Vector>(0, Vector(0.0,0.0,0.0));
+        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_vHitNormal = value;
+    });
+
+    ADD_CLASS_MEMBER("trace_t", "HitPoint", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_vHitPoint);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        Vector value = context->GetArgumentOr<Vector>(0, Vector(0.0,0.0,0.0));
+        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_vHitPoint = value;
+    });
+
+    ADD_CLASS_MEMBER("trace_t", "HitOffset", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_flHitOffset);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_flHitOffset = value;
+    });
+
+    ADD_CLASS_MEMBER("trace_t", "Fraction", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_flFraction);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        float value = context->GetArgumentOr<float>(0, 0);
+        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_flFraction = value;
+    });
+
+    ADD_CLASS_MEMBER("trace_t", "Triangle", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_nTriangle);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        int32_t value = context->GetArgumentOr<int32_t>(0, 0);
+        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_nTriangle = value;
+    });
+
+    ADD_CLASS_MEMBER("trace_t", "HitboxBoneIndex", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_nHitboxBoneIndex);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        int16_t value = context->GetArgumentOr<int16_t>(0, 0);
+        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_nHitboxBoneIndex = value;
+    });
+
+    ADD_CLASS_MEMBER("trace_t", "RayType", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_eRayType);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        uint8_t value = context->GetArgumentOr<uint8_t>(0, 0);
+        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_eRayType = value;
+    });
+
+    ADD_CLASS_MEMBER("trace_t", "StartInSolid", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_bStartInSolid);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        bool value = context->GetArgumentOr<bool>(0, false);
+        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_bStartInSolid = value;
+    });
+
+    ADD_CLASS_MEMBER("trace_t", "ExactHitPoint", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_bExactHitPoint);
+    },
+    [](FunctionContext* context, ClassData* data) -> void {
+        bool value = context->GetArgumentOr<bool>(0, false);
+        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_bExactHitPoint = value;
+    });
+
+    ADD_CLASS_FUNCTION("trace_t", "GetEntity", [](FunctionContext* context, ClassData* data) -> void {
+        data->GetData<CGameTraceInternal*>("trace_t")->GetEntity();
+    });
+
+    ADD_CLASS_FUNCTION("trace_t", "SyncToTrace", [](FunctionContext* context, ClassData* data) -> void {
+        data->GetData<CGameTraceInternal*>("trace_t")->SyncToTrace();
+    });
+
+    ADD_CLASS_FUNCTION("trace_t", "SyncFromTrace", [](FunctionContext* context, ClassData* data) -> void {
+        data->GetData<CGameTraceInternal*>("trace_t")->SyncFromTrace();
+    });
+
+    ADD_CLASS_FUNCTION("trace_t", "GetRawTrace", [](FunctionContext* context, ClassData* data) -> void {
+        data->GetData<CGameTraceInternal*>("trace_t")->GetRawTrace();
+    });
+
+    ADD_CLASS("Ray_t");
+
+    ADD_CLASS_FUNCTION("Ray_t", "Ray_t", [](FunctionContext* context, ClassData* data) -> void {
+        data->SetData("internalray_t", new InternalRay_t());
+    });
+
+    ADD_CLASS_FUNCTION("Ray_t", "~Ray_t", [](FunctionContext* context, ClassData* data) -> void {
+        if(data->HasData("internalray_t")) {
+            delete data->GetData<InternalRay_t*>("internalray_t");
+        }
+    });
+
+    ADD_CLASS_FUNCTION("Ray_t", "InitLine", [](FunctionContext* context, ClassData* data) -> void {
+        data->GetData<InternalRay_t*>("Ray_t")->InitLine();
+    });
+
+    ADD_CLASS_FUNCTION("Ray_t", "InitSphere", [](FunctionContext* context, ClassData* data) -> void {
+        data->GetData<InternalRay_t*>("Ray_t")->InitSphere();
+    });
+
+    ADD_CLASS_FUNCTION("Ray_t", "InitHull", [](FunctionContext* context, ClassData* data) -> void {
+        data->GetData<InternalRay_t*>("Ray_t")->InitHull();
+    });
+
+    ADD_CLASS_FUNCTION("Ray_t", "InitCapsule", [](FunctionContext* context, ClassData* data) -> void {
+        data->GetData<InternalRay_t*>("Ray_t")->InitCapsule();
+    });
+
+    ADD_CLASS_FUNCTION("Ray_t", "InitMesh", [](FunctionContext* context, ClassData* data) -> void {
+        data->GetData<InternalRay_t*>("Ray_t")->InitMesh();
+    });
+
+    ADD_CLASS_FUNCTION("Ray_t", "GetRayPtr", [](FunctionContext* context, ClassData* data) -> void {
+        data->GetData<InternalRay_t*>("Ray_t")->GetRayPtr();
+    });
+
+    ADD_CLASS_FUNCTION("Ray_t", "GetType", [](FunctionContext* context, ClassData* data) -> void {
+        data->GetData<InternalRay_t*>("Ray_t")->GetType();
+    });
+
+    ADD_CLASS("RayTrace");
+
+    ADD_CLASS_FUNCTION("RayTrace", "RayTrace", [](FunctionContext* context, ClassData* data) -> void {
+        data->SetData("internalray_t", new RayTrace());
+    });
+
+    ADD_CLASS_FUNCTION("RayTrace", "~RayTrace", [](FunctionContext* context, ClassData* data) -> void {
+        if(data->HasData("raytrace_t")) {
+            delete data->GetData<RayTrace*>("raytrace_t");
+        }
+    });
+
+    ADD_CLASS_FUNCTION("RayTrace", "TracePlayerBBox", [](FunctionContext* context, ClassData* data) -> void {
+        data->GetData<RayTrace*>("RayTrace")->TracePlayerBBox();
+    });
+
+    ADD_CLASS_FUNCTION("RayTrace", "TraceShape", [](FunctionContext* context, ClassData* data) -> void {
+        data->GetData<RayTrace*>("RayTrace")->TraceShape();
+    });
+
+    ADD_VARIABLES("_G", "RayType", {
+    { "RAY_TYPE_LINE", ENGINE_VALUE((uint64_t)RayType_t::RAY_TYPE_LINE) },
+    { "RAY_TYPE_SPHERE", ENGINE_VALUE((uint64_t)RayType_t::RAY_TYPE_SPHERE) },
+    { "RAY_TYPE_HULL", ENGINE_VALUE((uint64_t)RayType_t::RAY_TYPE_HULL) },
+    { "RAY_TYPE_CAPSULE", ENGINE_VALUE((uint64_t)RayType_t::RAY_TYPE_CAPSULE) },
+    { "RAY_TYPE_MESH", ENGINE_VALUE((uint64_t)RayType_t::RAY_TYPE_MESH) }
+});
+
+    ADD_VARIABLES("_G", "CollisionFunctionMask", {
+    { "FCOLLISION_FUNC_ENABLE_SOLID_CONTACT", ENGINE_VALUE((uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_SOLID_CONTACT) },
+    { "FCOLLISION_FUNC_ENABLE_TRACE_QUERY", ENGINE_VALUE((uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_TRACE_QUERY) },
+    { "FCOLLISION_FUNC_ENABLE_TOUCH_EVENT", ENGINE_VALUE((uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_TOUCH_EVENT) },
+    { "FCOLLISION_FUNC_ENABLE_SELF_COLLISIONS", ENGINE_VALUE((uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_SELF_COLLISIONS) },
+    { "FCOLLISION_FUNC_IGNORE_FOR_HITBOX_TEST", ENGINE_VALUE((uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_IGNORE_FOR_HITBOX_TEST) },
+    { "FCOLLISION_FUNC_ENABLE_TOUCH_PERSISTS", ENGINE_VALUE((uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_TOUCH_PERSISTS) }
+});
+
+    ADD_VARIABLES("_G", "RnQueryObjectSet", {
+    { "RNQUERY_OBJECTS_STATIC", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_STATIC) },
+    { "RNQUERY_OBJECTS_DYNAMIC", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_DYNAMIC) },
+    { "RNQUERY_OBJECTS_NON_COLLIDEABLE", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_NON_COLLIDEABLE) },
+    { "RNQUERY_OBJECTS_KEYFRAMED_ONLY", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_KEYFRAMED_ONLY) },
+    { "RNQUERY_OBJECTS_DYNAMIC_ONLY", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_DYNAMIC_ONLY) },
+    { "RNQUERY_OBJECTS_ALL_GAME_ENTITIES", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_ALL_GAME_ENTITIES) },
+    { "RNQUERY_OBJECTS_ALL", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_ALL) }
+});
+
+    ADD_VARIABLES("_G", "HitboxShapeType", {
+    { "HITBOX_SHAPE_HULL", ENGINE_VALUE((uint64_t)HitboxShapeType_t::HITBOX_SHAPE_HULL) },
+    { "HITBOX_SHAPE_SPHERE", ENGINE_VALUE((uint64_t)HitboxShapeType_t::HITBOX_SHAPE_SPHERE) },
+    { "HITBOX_SHAPE_CAPSULE", ENGINE_VALUE((uint64_t)HitboxShapeType_t::HITBOX_SHAPE_CAPSULE) }
+});
+
+    ADD_VARIABLES("_G", "TraceMask", {
+    { "MASK_ALL", ENGINE_VALUE((uint64_t)MASK_ALL) },
+    { "MASK_SOLID", ENGINE_VALUE((uint64_t)MASK_SOLID) },
+    { "MASK_PLAYERSOLID", ENGINE_VALUE((uint64_t)MASK_PLAYERSOLID) },
+    { "MASK_NPCSOLID", ENGINE_VALUE((uint64_t)MASK_NPCSOLID) },
+    { "MASK_NPCFLUID", ENGINE_VALUE((uint64_t)MASK_NPCFLUID) },
+    { "MASK_WATER", ENGINE_VALUE((uint64_t)MASK_WATER) },
+    { "MASK_SHOT", ENGINE_VALUE((uint64_t)MASK_SHOT) },
+    { "MASK_SHOT_BRUSHONLY", ENGINE_VALUE((uint64_t)MASK_SHOT_BRUSHONLY) },
+    { "MASK_SHOT_HULL", ENGINE_VALUE((uint64_t)MASK_SHOT_HULL) },
+    { "MASK_SHOT_PORTAL", ENGINE_VALUE((uint64_t)MASK_SHOT_PORTAL) },
+    { "MASK_SOLID_BRUSHONLY", ENGINE_VALUE((uint64_t)MASK_SOLID_BRUSHONLY) },
+    { "MASK_PLAYERSOLID_BRUSHONLY", ENGINE_VALUE((uint64_t)MASK_PLAYERSOLID_BRUSHONLY) },
+    { "MASK_NPCSOLID_BRUSHONLY", ENGINE_VALUE((uint64_t)MASK_NPCSOLID_BRUSHONLY) }
+});
+
+    ADD_VARIABLES("_G", "MaskContents", {
+    { "CONTENTS_EMPTY", ENGINE_VALUE((uint64_t)CONTENTS_EMPTY) },
+    { "CONTENTS_SOLID", ENGINE_VALUE((uint64_t)CONTENTS_SOLID) },
+    { "CONTENTS_HITBOX", ENGINE_VALUE((uint64_t)CONTENTS_HITBOX) },
+    { "CONTENTS_TRIGGER", ENGINE_VALUE((uint64_t)CONTENTS_TRIGGER) },
+    { "CONTENTS_SKY", ENGINE_VALUE((uint64_t)CONTENTS_SKY) },
+    { "CONTENTS_PLAYER_CLIP", ENGINE_VALUE((uint64_t)CONTENTS_PLAYER_CLIP) },
+    { "CONTENTS_NPC_CLIP", ENGINE_VALUE((uint64_t)CONTENTS_NPC_CLIP) },
+    { "CONTENTS_BLOCK_LOS", ENGINE_VALUE((uint64_t)CONTENTS_BLOCK_LOS) },
+    { "CONTENTS_BLOCK_LIGHT", ENGINE_VALUE((uint64_t)CONTENTS_BLOCK_LIGHT) },
+    { "CONTENTS_LADDER", ENGINE_VALUE((uint64_t)CONTENTS_LADDER) },
+    { "CONTENTS_PICKUP", ENGINE_VALUE((uint64_t)CONTENTS_PICKUP) },
+    { "CONTENTS_BLOCK_SOUND", ENGINE_VALUE((uint64_t)CONTENTS_BLOCK_SOUND) },
+    { "CONTENTS_NODRAW", ENGINE_VALUE((uint64_t)CONTENTS_NODRAW) },
+    { "CONTENTS_WINDOW", ENGINE_VALUE((uint64_t)CONTENTS_WINDOW) },
+    { "CONTENTS_PASS_BULLETS", ENGINE_VALUE((uint64_t)CONTENTS_PASS_BULLETS) },
+    { "CONTENTS_WORLD_GEOMETRY", ENGINE_VALUE((uint64_t)CONTENTS_WORLD_GEOMETRY) },
+    { "CONTENTS_WATER", ENGINE_VALUE((uint64_t)CONTENTS_WATER) },
+    { "CONTENTS_SLIME", ENGINE_VALUE((uint64_t)CONTENTS_SLIME) },
+    { "CONTENTS_TOUCH_ALL", ENGINE_VALUE((uint64_t)CONTENTS_TOUCH_ALL) },
+    { "CONTENTS_PLAYER", ENGINE_VALUE((uint64_t)CONTENTS_PLAYER) },
+    { "CONTENTS_NPC", ENGINE_VALUE((uint64_t)CONTENTS_NPC) },
+    { "CONTENTS_DEBRIS", ENGINE_VALUE((uint64_t)CONTENTS_DEBRIS) },
+    { "CONTENTS_PHYSICS_PROP", ENGINE_VALUE((uint64_t)CONTENTS_PHYSICS_PROP) },
+    { "CONTENTS_NAV_IGNORE", ENGINE_VALUE((uint64_t)CONTENTS_NAV_IGNORE) },
+    { "CONTENTS_NAV_LOCAL_IGNORE", ENGINE_VALUE((uint64_t)CONTENTS_NAV_LOCAL_IGNORE) },
+    { "CONTENTS_POST_PROCESSING_VOLUME", ENGINE_VALUE((uint64_t)CONTENTS_POST_PROCESSING_VOLUME) },
+    { "CONTENTS_UNUSED_LAYER3", ENGINE_VALUE((uint64_t)CONTENTS_UNUSED_LAYER3) },
+    { "CONTENTS_CARRIED_OBJECT", ENGINE_VALUE((uint64_t)CONTENTS_CARRIED_OBJECT) },
+    { "CONTENTS_PUSHAWAY", ENGINE_VALUE((uint64_t)CONTENTS_PUSHAWAY) },
+    { "CONTENTS_SERVER_ENTITY_ON_CLIENT", ENGINE_VALUE((uint64_t)CONTENTS_SERVER_ENTITY_ON_CLIENT) },
+    { "CONTENTS_CARRIED_WEAPON", ENGINE_VALUE((uint64_t)CONTENTS_CARRIED_WEAPON) },
+    { "CONTENTS_STATIC_LEVEL", ENGINE_VALUE((uint64_t)CONTENTS_STATIC_LEVEL) },
+    { "CONTENTS_CSGO_TEAM1", ENGINE_VALUE((uint64_t)CONTENTS_CSGO_TEAM1) },
+    { "CONTENTS_CSGO_TEAM2", ENGINE_VALUE((uint64_t)CONTENTS_CSGO_TEAM2) },
+    { "CONTENTS_CSGO_GRENADE_CLIP", ENGINE_VALUE((uint64_t)CONTENTS_CSGO_GRENADE_CLIP) },
+    { "CONTENTS_CSGO_DRONE_CLIP", ENGINE_VALUE((uint64_t)CONTENTS_CSGO_DRONE_CLIP) },
+    { "CONTENTS_CSGO_MOVEABLE", ENGINE_VALUE((uint64_t)CONTENTS_CSGO_MOVEABLE) },
+    { "CONTENTS_CSGO_OPAQUE", ENGINE_VALUE((uint64_t)CONTENTS_CSGO_OPAQUE) },
+    { "CONTENTS_CSGO_MONSTER", ENGINE_VALUE((uint64_t)CONTENTS_CSGO_MONSTER) },
+    { "CONTENTS_CSGO_UNUSED_LAYER", ENGINE_VALUE((uint64_t)CONTENTS_CSGO_UNUSED_LAYER) },
+    { "CONTENTS_CSGO_THROWN_GRENADE", ENGINE_VALUE((uint64_t)CONTENTS_CSGO_THROWN_GRENADE) }
+});
+
+    // GetGlobalNamespace(ctx).addConstant("raytrace", RayTrace(plugin_name));
 }
 
 RayTrace::RayTrace(std::string plugin_name)
