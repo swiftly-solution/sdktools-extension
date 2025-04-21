@@ -2,7 +2,7 @@
 #include "entities.h"
 #include "raytrace.h"
 
-#include <embedder/src/embedder.h>
+#include <embedder/src/Embedder.h>
 
 //////////////////////////////////////////////////////////////
 /////////////////        Core Variables        //////////////
