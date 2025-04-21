@@ -2,7 +2,7 @@
 #include "entities.h"
 #include "raytrace.h"
 
-#include <Embedder.h>
+#include <embedder/src/Embedder.h>
 
 //////////////////////////////////////////////////////////////
 /////////////////        Core Variables        //////////////
@@ -13,36 +13,33 @@ SH_DECL_HOOK3_void(INetworkServerService, StartupServer, SH_NOATTRIB, 0, const G
 SDKTools g_Ext;
 EntityListener g_entListener;
 IVPhysics2* g_Physics = nullptr;
-CUtlVector<FuncHookBase *> g_vecHooks;
 CREATE_GLOBALVARS();
 
-void TraceShapeHook(IVPhysics2* _this, Ray_t& ray, Vector& start, Vector& end, CTraceFilter* filter, trace_t* trace);
-FuncHook<decltype(TraceShapeHook)> TTraceShape(TraceShapeHook, "TraceShape");
+dyno::ReturnAction TraceShapeHook(dyno::CallbackType cbType, dyno::IHook& hook);
+FunctionHook TraceShape("TraceShape", dyno::CallbackType::Pre, TraceShapeHook, "pppppppppppp", 'b');
 
 //////////////////////////////////////////////////////////////
 /////////////////          Core Class          //////////////
 ////////////////////////////////////////////////////////////
 
-void TraceShapeHook(IVPhysics2* _this, Ray_t& ray, Vector& start, Vector& end, CTraceFilter* filter, trace_t* trace)
+dyno::ReturnAction TraceShapeHook(dyno::CallbackType cbType, dyno::IHook& hook)
 {
-    if(g_Physics == nullptr) {
+    IVPhysics2* _this = hook.getArgument<IVPhysics2*>(0);
+
+    if (g_Physics == nullptr) {
         g_Physics = _this;
-        TTraceShape(_this, ray, start, end, filter, trace);
-        TTraceShape.Disable();
+        TraceShape.Disable();
     }
+
+    return dyno::ReturnAction::Ignored;
 }
 
 EXT_EXPOSE(g_Ext);
-bool SDKTools::Load(std::string& error, SourceHook::ISourceHook *SHPtr, ISmmAPI* ismm, bool late)
+bool SDKTools::Load(std::string& error, SourceHook::ISourceHook* SHPtr, ISmmAPI* ismm, bool late)
 {
     SAVE_GLOBALVARS();
-    
-    GET_IFACE_ANY(GetEngineFactory, g_pNetworkServerService, INetworkServerService, NETWORKSERVERSERVICE_INTERFACE_VERSION);
 
-    if(!InitializeHooks()) {
-        error = "Failed to initialize hooks.";
-        return false;
-    }
+    GET_IFACE_ANY(GetEngineFactory, g_pNetworkServerService, INetworkServerService, NETWORKSERVERSERVICE_INTERFACE_VERSION);
 
     g_entListener.Initialize();
     return true;
@@ -50,7 +47,6 @@ bool SDKTools::Load(std::string& error, SourceHook::ISourceHook *SHPtr, ISmmAPI*
 
 bool SDKTools::Unload(std::string& error)
 {
-    UnloadHooks();
     g_entListener.Destroy();
     return true;
 }
@@ -66,11 +62,13 @@ void SDKTools::AllPluginsLoaded()
 }
 
 void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name);
+void entities_SetupScripting(EContext* ctx);
 
 bool SDKTools::OnPluginLoad(std::string pluginName, void* pluginState, PluginKind_t kind, std::string& error)
 {
     EContext* ctx = (EContext*)pluginState;
 
+    entities_SetupScripting(ctx);
     RayTrace_OnPluginLoad(ctx, pluginName);
 
     return true;

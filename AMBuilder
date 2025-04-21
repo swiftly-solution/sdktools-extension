@@ -62,9 +62,6 @@ for sdk_target in MMSPlugin.sdk_targets:
             "-fexceptions",
         ]
         binary.compiler.postlink += [
-            os.path.join(builder.sourcePath, 'vendor', 'funchook', 'lib', 'libfunchook.a'),
-              os.path.join(builder.sourcePath, 'vendor', 'funchook', 'lib', 'libdistorm.a'),
-
             "-lgnutls",
             "-lz",
             "-lpthread",
@@ -101,12 +98,11 @@ for sdk_target in MMSPlugin.sdk_targets:
             "/TP",
             "/MT",
             "/W3",
-            "/Z7"
+            "/Z7",
+            "/EHsc"
         ]
         binary.compiler.postlink += [
-            os.path.join(builder.sourcePath, 'vendor', 'funchook', 'lib', 'funchook.lib'),
-            os.path.join(builder.sourcePath, 'vendor', 'funchook', 'lib', 'distorm.lib'),
-              "psapi.lib",
+            "psapi.lib",
             "winmm.lib",
             "ws2_32.lib",
             "wldap32.lib",
@@ -163,6 +159,9 @@ for sdk_target in MMSPlugin.sdk_targets:
     binary.compiler.cxxincludes += [
         os.path.join(builder.sourcePath, 'vendor'),
         os.path.join(builder.sourcePath, 'vendor', 'embedder', 'src'),
+
+        os.path.join(builder.sourcePath, 'vendor', 'swiftly-ext', 'hooks'),
+        os.path.join(builder.sourcePath, 'vendor', 'swiftly-ext', 'hooks', 'dynohook'),
 
         os.path.join(sdk['path']),
         os.path.join(sdk['path'], 'public'),

@@ -33,6 +33,6 @@ with open(os.path.join(builder.buildPath, 'pdblog.txt'), 'wt') as fp:
   for line in pdb_list:
     fp.write(line.path + '\n')
 
-gamedata_folder = builder.AddFolder(os.path.join('addons', 'swiftly', 'gamedata', 'sdktools'))
-builder.AddCopy(os.path.join(builder.sourcePath, 'plugin_files', 'gamedata', 'sdktools', 'offsets.json'), gamedata_folder)
-builder.AddCopy(os.path.join(builder.sourcePath, 'plugin_files', 'gamedata', 'sdktools', 'signatures.json'), gamedata_folder)
+gamedata_folder = builder.AddFolder(os.path.join('addons', 'swiftly', 'gamedata', 'cs2', 'sdktools'))
+builder.AddCopy(os.path.join(builder.sourcePath, 'plugin_files', 'gamedata', 'cs2', 'sdktools', 'offsets.json'), gamedata_folder)
+builder.AddCopy(os.path.join(builder.sourcePath, 'plugin_files', 'gamedata', 'cs2', 'sdktools', 'signatures.json'), gamedata_folder)
