@@ -11,7 +11,7 @@
 #include <swiftly-ext/hooks/function.h>
 #include <swiftly-ext/hooks/vfunction.h>
 
-#include <embedder/src/embedder.h>
+#include <embedder/src/Embedder.h>
 template<class T>
 struct Stack;
 template<>

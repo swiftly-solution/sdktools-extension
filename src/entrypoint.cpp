@@ -62,11 +62,13 @@ void SDKTools::AllPluginsLoaded()
 }
 
 void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name);
+void entities_SetupScripting(EContext* ctx);
 
 bool SDKTools::OnPluginLoad(std::string pluginName, void* pluginState, PluginKind_t kind, std::string& error)
 {
     EContext* ctx = (EContext*)pluginState;
 
+    entities_SetupScripting(ctx);
     RayTrace_OnPluginLoad(ctx, pluginName);
 
     return true;
