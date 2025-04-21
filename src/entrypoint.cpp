@@ -24,26 +24,21 @@ FunctionHook TraceShape("TraceShape", dyno::CallbackType::Pre, TraceShapeHook, "
 
 dyno::ReturnAction TraceShapeHook(dyno::CallbackType cbType, dyno::IHook& hook)
 {
-    /// IVPhysics2* _this, Ray_t& ray, Vector& start, Vector& end, CTraceFilter* filter, trace_t* trace
-    IVPhysics2* _this = hook.GetArgument<IVPhysics2*>(0);
-    Ray_t* ray = hook.GetArgument<Ray_t*>(1);
-    Vector* start = hook.GetArgument<Vector*>(2);
-    Vector* end = hook.GetArgument<Vector*>(3);
-    CTraceFilter* filter = hook.GetArgument<CTraceFilter*>(4);
-    trace_t* trace = hook.GetArgument<trace_t*>(5);
-    
-    if(g_Physics == nullptr) {
+    IVPhysics2* _this = hook.getArgument<IVPhysics2*>(0);
+
+    if (g_Physics == nullptr) {
         g_Physics = _this;
-        TTraceShape(_this, ray, start, end, filter, trace);
-        TTraceShape.Disable();
+        TraceShape.Disable();
     }
+
+    return dyno::ReturnAction::Ignored;
 }
 
 EXT_EXPOSE(g_Ext);
-bool SDKTools::Load(std::string& error, SourceHook::ISourceHook *SHPtr, ISmmAPI* ismm, bool late)
+bool SDKTools::Load(std::string& error, SourceHook::ISourceHook* SHPtr, ISmmAPI* ismm, bool late)
 {
     SAVE_GLOBALVARS();
-    
+
     GET_IFACE_ANY(GetEngineFactory, g_pNetworkServerService, INetworkServerService, NETWORKSERVERSERVICE_INTERFACE_VERSION);
 
     g_entListener.Initialize();
@@ -52,7 +47,6 @@ bool SDKTools::Load(std::string& error, SourceHook::ISourceHook *SHPtr, ISmmAPI*
 
 bool SDKTools::Unload(std::string& error)
 {
-    UnloadHooks();
     g_entListener.Destroy();
     return true;
 }

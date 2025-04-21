@@ -1,10 +1,10 @@
 #include "raytrace.h"
 #include "entrypoint.h"
-#include <Embedder.h>
+#include <swiftly-ext/memory.h>
+#include <embedder/src/Embedder.h>
 
 void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
 {
-
     ADD_CLASS("BBox");
 
     ADD_CLASS_FUNCTION("BBox", "BBox", [](FunctionContext* context, ClassData* data) -> void {
@@ -49,7 +49,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nInteractsWith);
         },
         [](FunctionContext* context, ClassData* data) -> void {
-            uint64_t value = context->GetArgumentOr<uint64_t>(0, "");
+            uint64_t value = context->GetArgumentOr<uint64_t>(0, 0);
             data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nInteractsWith = value;
         });
 
@@ -57,7 +57,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nInteractsExclude);
         },
         [](FunctionContext* context, ClassData* data) -> void {
-            uint64_t value = context->GetArgumentOr<uint64_t>(0, "");
+            uint64_t value = context->GetArgumentOr<uint64_t>(0, 0);
             data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nInteractsExclude = value;
         });
 
@@ -65,7 +65,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nInteractsAs);
         },
         [](FunctionContext* context, ClassData* data) -> void {
-            uint64_t value = context->GetArgumentOr<uint64_t>(0, "");
+            uint64_t value = context->GetArgumentOr<uint64_t>(0, 0);
             data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nInteractsAs = value;
         });
 
@@ -89,7 +89,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         context->SetReturn(data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nHierarchyIds);
         },
         [](FunctionContext* context, ClassData* data) -> void {
-            std::vector<uint32_t> value = context->GetArgumentOr<std::vector<uint32_t>>(0, std::vector<uint32_t>{});
+            std::vector<uint16_t> value = context->GetArgumentOr<std::vector<uint16_t>>(0, std::vector<uint16_t>{});
             data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->m_nHierarchyIds = value;
         });
 
@@ -174,7 +174,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         });
 
     ADD_CLASS_FUNCTION("CTraceFilter", "Save", [](FunctionContext* context, ClassData* data) -> void {
-        data->GetData<InternalCTraceFilter*>("CTraceFilter")->Save();
+        data->GetData<CInternalTraceFilter*>("ctracefilter_ptr")->Save();
         });
 
     ADD_CLASS("CPhysSurfacePropertiesPhysics");
@@ -333,95 +333,93 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         }
         });
 
-    /*
-    /// ALL FROM ABOVE CUTLSTRING, GL SKUZZIADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "impactSoft", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_impactSoft);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        float value = context->GetArgumentOr<float>(0, 0);
-        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_impactSoft = value;
-    });
+    ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "impactSoft", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_impactSoft.String());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            std::string value = context->GetArgumentOr<std::string>(0, "");
+            data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_impactSoft.Set(value.c_str());
+        });
 
     ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "impactHard", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_impactHard);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        float value = context->GetArgumentOr<float>(0, 0);
-        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_impactHard = value;
-    });
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_impactHard.String());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            std::string value = context->GetArgumentOr<std::string>(0, "");
+            data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_impactHard.Set(value.c_str());
+        });
 
     ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "scrapeSmooth", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_scrapeSmooth);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        float value = context->GetArgumentOr<float>(0, 0);
-        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_scrapeSmooth = value;
-    });
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_scrapeSmooth.String());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            std::string value = context->GetArgumentOr<std::string>(0, "");
+            data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_scrapeSmooth.Set(value.c_str());
+        });
 
     ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "scrapeRough", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_scrapeRough);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        float value = context->GetArgumentOr<float>(0, 0);
-        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_scrapeRough = value;
-    });
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_scrapeRough.String());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            std::string value = context->GetArgumentOr<std::string>(0, "");
+            data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_scrapeRough.Set(value.c_str());
+        });
 
     ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "bulletImpact", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_bulletImpact);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        float value = context->GetArgumentOr<float>(0, 0);
-        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_bulletImpact = value;
-    });
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_bulletImpact.String());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            std::string value = context->GetArgumentOr<std::string>(0, "");
+            data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_bulletImpact.Set(value.c_str());
+        });
 
     ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "rolling", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_rolling);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        float value = context->GetArgumentOr<float>(0, 0);
-        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_rolling = value;
-    });
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_rolling.String());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            std::string value = context->GetArgumentOr<std::string>(0, "");
+            data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_rolling.Set(value.c_str());
+        });
 
     ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "break", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_break);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        float value = context->GetArgumentOr<float>(0, 0);
-        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_break = value;
-    });
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_break.String());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            std::string value = context->GetArgumentOr<std::string>(0, "");
+            data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_break.Set(value.c_str());
+        });
 
     ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "strain", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_strain);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        float value = context->GetArgumentOr<float>(0, 0);
-        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_strain = value;
-    });
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_strain.String());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            std::string value = context->GetArgumentOr<std::string>(0, "");
+            data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_strain.Set(value.c_str());
+        });
 
     ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "meleeImpact", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_meleeImpact);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        float value = context->GetArgumentOr<float>(0, 0);
-        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_meleeImpact = value;
-    });
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_meleeImpact.String());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            std::string value = context->GetArgumentOr<std::string>(0, "");
+            data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_meleeImpact.Set(value.c_str());
+        });
 
     ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "pushOff", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_pushOff);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        float value = context->GetArgumentOr<float>(0, 0);
-        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_pushOff = value;
-    });
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_pushOff.String());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            std::string value = context->GetArgumentOr<std::string>(0, "");
+            data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_pushOff.Set(value.c_str());
+        });
 
     ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "skidStop", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_skidStop);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        float value = context->GetArgumentOr<float>(0, 0);
-        data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_skidStop = value;
-    });*/
-    /// ALL FROM ABOVE CUTLSTRING, GL SKUZZI
+        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_skidStop.String());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            std::string value = context->GetArgumentOr<std::string>(0, "");
+            data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_skidStop.Set(value.c_str());
+        });
 
     ADD_CLASS("CPhysSurfaceProperties");
 
@@ -435,13 +433,13 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         }
         });
 
-    /*ADD_CLASS_MEMBER("CPhysSurfaceProperties", "name", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_name);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        float value = context->GetArgumentOr<float>(0, 0);
-        data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_name = value;
-    });*/ /// CUtlString
+    ADD_CLASS_MEMBER("CPhysSurfaceProperties", "name", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_name.String());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            std::string value = context->GetArgumentOr<std::string>(0, "");
+            data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_name.Set(value.c_str());
+        });
 
     ADD_CLASS_MEMBER("CPhysSurfaceProperties", "nameHash", [](FunctionContext* context, ClassData* data) -> void {
         context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_nameHash);
@@ -483,37 +481,25 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
             data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_bHidden = value;
         });
 
-    /*ADD_CLASS_MEMBER("CPhysSurfaceProperties", "description", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_description);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        float value = context->GetArgumentOr<float>(0, 0);
-        data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_description = value;
-    });*/ ///CUtlString
+    ADD_CLASS_MEMBER("CPhysSurfaceProperties", "description", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_description.String());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            std::string value = context->GetArgumentOr<std::string>(0, "");
+            data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_description.Set(value.c_str());
+        });
 
-    /*ADD_CLASS_MEMBER("CPhysSurfaceProperties", "physics", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_physics);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        float value = context->GetArgumentOr<float>(0, 0);
-        data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_physics = value;
-    });
+    ADD_CLASS_MEMBER_READONLY("CPhysSurfaceProperties", "physics", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(MAKE_CLASS_INSTANCE("CPhysSurfacePropertiesPhysics", { { "cphyssurfacepropertiesphysics_ptr", data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_physics } }));
+        });
 
-    ADD_CLASS_MEMBER("CPhysSurfaceProperties", "audioSounds", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_audioSounds);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        float value = context->GetArgumentOr<float>(0, 0);
-        data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_audioSounds = value;
-    });
+    ADD_CLASS_MEMBER_READONLY("CPhysSurfaceProperties", "audioSounds", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(MAKE_CLASS_INSTANCE("CPhysSurfacePropertiesSoundNames", { { "cphyssurfacepropertiessoundnames_ptr", data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_audioSounds } }));
+        });
 
-    ADD_CLASS_MEMBER("CPhysSurfaceProperties", "audioParams", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_audioParams);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        float value = context->GetArgumentOr<float>(0, 0);
-        data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_audioParams = value;
-    });*/ /// CPhysSurfacePropertiesPhysics, CPhysSurfacePropertiesSoundNames, CPhysSurfacePropertiesAudio, ALL IN ORDER
+    ADD_CLASS_MEMBER_READONLY("CPhysSurfaceProperties", "audioParams", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(MAKE_CLASS_INSTANCE("CPhysSurfacePropertiesAudio", { { "cphyssurfacepropertiesaudio_ptr", data->GetData<CPhysSurfaceProperties*>("cphyssurfaceproperties_ptr")->m_audioParams } }));
+        });
 
     ADD_CLASS("CHitBox");
 
@@ -527,32 +513,31 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         }
         });
 
-    // ADD_CLASS_MEMBER("CHitBox", "name", [](FunctionContext* context, ClassData* data) -> void {
-    //     context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_name);
-    // },
-    // [](FunctionContext* context, ClassData* data) -> void {
-    //     int32 value = context->GetArgumentOr<int32>(0, 0);
-    //     data->GetData<CHitBox*>("chitbox_ptr")->m_name = value;
-    // });
+    ADD_CLASS_MEMBER("CHitBox", "name", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_name.String());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            std::string value = context->GetArgumentOr<std::string>(0, "");
+            data->GetData<CHitBox*>("chitbox_ptr")->m_name.Set(value.c_str());
+        });
 
 
-    // ADD_CLASS_MEMBER("CHitBox", "SurfaceProperty", [](FunctionContext* context, ClassData* data) -> void {
-    //     context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_sSurfaceProperty);
-    // },
-    // [](FunctionContext* context, ClassData* data) -> void {
-    //     int32 value = context->GetArgumentOr<int32>(0, 0);
-    //     data->GetData<CHitBox*>("chitbox_ptr")->m_sSurfaceProperty = value;
-    // });
+    ADD_CLASS_MEMBER("CHitBox", "SurfaceProperty", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_sSurfaceProperty.String());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            std::string value = context->GetArgumentOr<std::string>(0, "");
+            data->GetData<CHitBox*>("chitbox_ptr")->m_sSurfaceProperty.Set(value.c_str());
+        });
 
 
-    // ADD_CLASS_MEMBER("CHitBox", "BoneName", [](FunctionContext* context, ClassData* data) -> void {
-    //     context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_sBoneName);
-    // },
-    // [](FunctionContext* context, ClassData* data) -> void {
-    //     int32 value = context->GetArgumentOr<int32>(0, 0);
-    //     data->GetData<CHitBox*>("chitbox_ptr")->m_sBoneName = value;
-    // });
-    //// TILL BoneName, ALL CUtlString
+    ADD_CLASS_MEMBER("CHitBox", "BoneName", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_sBoneName.String());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            std::string value = context->GetArgumentOr<std::string>(0, "");
+            data->GetData<CHitBox*>("chitbox_ptr")->m_sBoneName.Set(value.c_str());
+        });
 
     ADD_CLASS_MEMBER("CHitBox", "MinBounds", [](FunctionContext* context, ClassData* data) -> void {
         context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_vMinBounds);
@@ -581,14 +566,13 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         });
 
 
-    // ADD_CLASS_MEMBER("CHitBox", "BoneNameHash", [](FunctionContext* context, ClassData* data) -> void {
-    //     context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_nBoneNameHash);
-    // },
-    // [](FunctionContext* context, ClassData* data) -> void {
-    //     int32 value = context->GetArgumentOr<int32>(0, 0);
-    //     data->GetData<CHitBox*>("chitbox_ptr")->m_nBoneNameHash = value;
-    // }); /// CUtlStringToken
-
+    ADD_CLASS_MEMBER("CHitBox", "BoneNameHash", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_nBoneNameHash.GetHashCode());
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            uint32 value = context->GetArgumentOr<uint32>(0, 0);
+            data->GetData<CHitBox*>("chitbox_ptr")->m_nBoneNameHash.SetHashCode(value);
+        });
 
     ADD_CLASS_MEMBER("CHitBox", "GroupId", [](FunctionContext* context, ClassData* data) -> void {
         context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_nGroupId);
@@ -626,14 +610,13 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         });
 
 
-    // ADD_CLASS_MEMBER("CHitBox", "RenderColor", [](FunctionContext* context, ClassData* data) -> void {
-    //     context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_cRenderColor);
-    // },
-    // [](FunctionContext* context, ClassData* data) -> void {
-    //     int32 value = context->GetArgumentOr<int32>(0, 0);
-    //     data->GetData<CHitBox*>("chitbox_ptr")->m_cRenderColor = value;
-    // }); /// Color
-
+    ADD_CLASS_MEMBER("CHitBox", "RenderColor", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_cRenderColor);
+        },
+        [](FunctionContext* context, ClassData* data) -> void {
+            Color value = context->GetArgumentOr<Color>(0, Color(255, 255, 255, 255));
+            data->GetData<CHitBox*>("chitbox_ptr")->m_cRenderColor = value;
+        });
 
     ADD_CLASS_MEMBER("CHitBox", "HitBoxIndex", [](FunctionContext* context, ClassData* data) -> void {
         context->SetReturn(data->GetData<CHitBox*>("chitbox_ptr")->m_nHitBoxIndex);
@@ -740,21 +723,13 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         }
         });
 
-    /*ADD_CLASS_MEMBER("trace_t", "SurfaceProperties", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_pSurfaceProperties);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        uint8 value = context->GetArgumentOr<uint8>(0, 0);
-        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_pSurfaceProperties = value;
-    });*/ /// CPhysSurfaceProperties
+    ADD_CLASS_MEMBER_READONLY("trace_t", "SurfaceProperties", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(MAKE_CLASS_INSTANCE("CPhysSurfaceProperties", { { "cphyssurfaceproperties_ptr", data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_pSurfaceProperties } }));
+        });
 
-    /*ADD_CLASS_MEMBER("trace_t", "Hitbox", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_pHitbox);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        uint8 value = context->GetArgumentOr<uint8>(0, 0);
-        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_pHitbox = value;
-    });*/ //// CHitBox
+    ADD_CLASS_MEMBER_READONLY("trace_t", "Hitbox", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(MAKE_CLASS_INSTANCE("CHitBox", { { "chitbox_ptr", data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_pHitbox } }));
+        });
 
     ADD_CLASS_MEMBER("trace_t", "Contents", [](FunctionContext* context, ClassData* data) -> void {
         context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_nContents);
@@ -764,13 +739,9 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
             data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_nContents = value;
         });
 
-    /*ADD_CLASS_MEMBER("trace_t", "ShapeAttributes", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_ShapeAttributes);
-    },
-    [](FunctionContext* context, ClassData* data) -> void {
-        uint8 value = context->GetArgumentOr<uint8>(0, 0);
-        data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_ShapeAttributes = value;
-    });*/ /// RnCollisionAttr_t
+    ADD_CLASS_MEMBER_READONLY("trace_t", "ShapeAttributes", [](FunctionContext* context, ClassData* data) -> void {
+        context->SetReturn(MAKE_CLASS_INSTANCE("RnCollisionAttr_t", { { "rncollisionattr_t_ptr", data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_ShapeAttributes } }));
+        });
 
     ADD_CLASS_MEMBER("trace_t", "StartPos", [](FunctionContext* context, ClassData* data) -> void {
         context->SetReturn(data->GetData<CGameTraceInternal*>("cgametraceinternal_ptr")->m_vStartPos);
@@ -889,54 +860,90 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         });
 
     ADD_CLASS_FUNCTION("Ray_t", "InitLine", [](FunctionContext* context, ClassData* data) -> void {
-        data->GetData<InternalRay_t*>("Ray_t")->InitLine();
+        Vector vec = context->GetArgumentOr<Vector>(0, Vector(0.0, 0.0, 0.0));
+        data->GetData<InternalRay_t*>("Ray_t")->InitLine(vec);
         });
 
     ADD_CLASS_FUNCTION("Ray_t", "InitSphere", [](FunctionContext* context, ClassData* data) -> void {
-        data->GetData<InternalRay_t*>("Ray_t")->InitSphere();
+        Vector vec = context->GetArgumentOr<Vector>(0, Vector(0.0, 0.0, 0.0));
+        float radius = context->GetArgumentOr<float>(0, 0.0f);
+        data->GetData<InternalRay_t*>("Ray_t")->InitSphere(vec, radius);
         });
 
     ADD_CLASS_FUNCTION("Ray_t", "InitHull", [](FunctionContext* context, ClassData* data) -> void {
-        data->GetData<InternalRay_t*>("Ray_t")->InitHull();
+        Vector vmin = context->GetArgumentOr<Vector>(0, Vector(0.0, 0.0, 0.0));
+        Vector vmax = context->GetArgumentOr<Vector>(1, Vector(0.0, 0.0, 0.0));
+        data->GetData<InternalRay_t*>("Ray_t")->InitHull(vmin, vmax);
         });
 
     ADD_CLASS_FUNCTION("Ray_t", "InitCapsule", [](FunctionContext* context, ClassData* data) -> void {
-        data->GetData<InternalRay_t*>("Ray_t")->InitCapsule();
+        Vector vmin = context->GetArgumentOr<Vector>(0, Vector(0.0, 0.0, 0.0));
+        Vector vmax = context->GetArgumentOr<Vector>(1, Vector(0.0, 0.0, 0.0));
+        float radius = context->GetArgumentOr<float>(2, 0.0f);
+        data->GetData<InternalRay_t*>("Ray_t")->InitCapsule(vmin, vmax, radius);
         });
 
     ADD_CLASS_FUNCTION("Ray_t", "InitMesh", [](FunctionContext* context, ClassData* data) -> void {
-        data->GetData<InternalRay_t*>("Ray_t")->InitMesh();
+        Vector vmin = context->GetArgumentOr<Vector>(0, Vector(0.0, 0.0, 0.0));
+        Vector vmax = context->GetArgumentOr<Vector>(1, Vector(0.0, 0.0, 0.0));
+        std::vector<Vector> vertices = context->GetArgumentOr<std::vector<Vector>>(0, std::vector<Vector>{});
+        data->GetData<InternalRay_t*>("Ray_t")->InitMesh(vmin, vmax, vertices);
         });
 
     ADD_CLASS_FUNCTION("Ray_t", "GetRayPtr", [](FunctionContext* context, ClassData* data) -> void {
-        data->GetData<InternalRay_t*>("Ray_t")->GetRayPtr();
+        context->SetReturn(data->GetData<InternalRay_t*>("Ray_t")->GetRayPtr());
         });
 
     ADD_CLASS_FUNCTION("Ray_t", "GetType", [](FunctionContext* context, ClassData* data) -> void {
-        data->GetData<InternalRay_t*>("Ray_t")->GetType();
+        context->SetReturn(data->GetData<InternalRay_t*>("Ray_t")->GetType());
         });
 
     ADD_CLASS("RayTrace");
 
-    ADD_CLASS_FUNCTION("RayTrace", "RayTrace", [](FunctionContext* context, ClassData* data) -> void {
-        data->SetData("internalray_t", new RayTrace());
-        });
-
-    ADD_CLASS_FUNCTION("RayTrace", "~RayTrace", [](FunctionContext* context, ClassData* data) -> void {
-        if (data->HasData("raytrace_t")) {
-            delete data->GetData<RayTrace*>("raytrace_t");
-        }
-        });
-
     ADD_CLASS_FUNCTION("RayTrace", "TracePlayerBBox", [](FunctionContext* context, ClassData* data) -> void {
-        data->GetData<RayTrace*>("RayTrace")->TracePlayerBBox();
+        Vector start = context->GetArgumentOr<Vector>(0, Vector(0.0, 0.0, 0.0));
+        Vector end = context->GetArgumentOr<Vector>(1, Vector(0.0, 0.0, 0.0));
+        ClassData* bounds = context->GetArgumentOr<ClassData*>(2, nullptr);
+        ClassData* filter = context->GetArgumentOr<ClassData*>(3, nullptr);
+        ClassData* trace = context->GetArgumentOr<ClassData*>(4, nullptr);
+
+        if (!bounds || !bounds->HasData("bbox_ptr")) return;
+        if (!filter || !filter->HasData("ctracefilter_ptr")) return;
+        if (!trace || !trace->HasData("cgametraceinternal_ptr")) return;
+
+        void* sig = GetSignature("TracePlayerBBox");
+        if (sig == nullptr) return;
+
+        CInternalTraceFilter* ftr = filter->GetData<CInternalTraceFilter*>("ctracefilter_ptr");
+        CGameTraceInternal* trc = trace->GetData<CGameTraceInternal*>("cgametraceinternal_ptr");
+        ftr->Save();
+        reinterpret_cast<TracePlayerBBox_t>(sig)(start, end, *bounds->GetData<bbox_t*>("bbox_ptr"), ftr->GetRawTraceFilter(), *trc->GetRawTrace());
+        trc->SyncFromTrace();
         });
 
     ADD_CLASS_FUNCTION("RayTrace", "TraceShape", [](FunctionContext* context, ClassData* data) -> void {
-        data->GetData<RayTrace*>("RayTrace")->TraceShape();
+        Vector start = context->GetArgumentOr<Vector>(0, Vector(0.0, 0.0, 0.0));
+        Vector end = context->GetArgumentOr<Vector>(1, Vector(0.0, 0.0, 0.0));
+        ClassData* ray = context->GetArgumentOr<ClassData*>(2, nullptr);
+        ClassData* filter = context->GetArgumentOr<ClassData*>(3, nullptr);
+        ClassData* trace = context->GetArgumentOr<ClassData*>(4, nullptr);
+
+        if (!ray || !ray->HasData("internalray_t")) return;
+        if (!filter || !filter->HasData("ctracefilter_ptr")) return;
+        if (!trace || !trace->HasData("cgametraceinternal_ptr")) return;
+
+        void* sig = GetSignature("TracePlayerBBox");
+        if (sig == nullptr) return;
+
+        InternalRay_t* rawray = ray->GetData<InternalRay_t*>("internalray_t");
+        CInternalTraceFilter* ftr = filter->GetData<CInternalTraceFilter*>("ctracefilter_ptr");
+        CGameTraceInternal* trc = trace->GetData<CGameTraceInternal*>("cgametraceinternal_ptr");
+        ftr->Save();
+        reinterpret_cast<TraceShape_t>(sig)(g_Physics, *(rawray->GetRawRay()), start, end, ftr->GetRawTraceFilter(), trc->GetRawTrace());
+        trc->SyncFromTrace();
         });
 
-    ADD_VARIABLES("_G", "RayType", {
+    ADD_VARIABLES("RayType", {
     { "RAY_TYPE_LINE", ENGINE_VALUE((uint64_t)RayType_t::RAY_TYPE_LINE) },
     { "RAY_TYPE_SPHERE", ENGINE_VALUE((uint64_t)RayType_t::RAY_TYPE_SPHERE) },
     { "RAY_TYPE_HULL", ENGINE_VALUE((uint64_t)RayType_t::RAY_TYPE_HULL) },
@@ -944,7 +951,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
     { "RAY_TYPE_MESH", ENGINE_VALUE((uint64_t)RayType_t::RAY_TYPE_MESH) }
         });
 
-    ADD_VARIABLES("_G", "CollisionFunctionMask", {
+    ADD_VARIABLES("CollisionFunctionMask", {
     { "FCOLLISION_FUNC_ENABLE_SOLID_CONTACT", ENGINE_VALUE((uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_SOLID_CONTACT) },
     { "FCOLLISION_FUNC_ENABLE_TRACE_QUERY", ENGINE_VALUE((uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_TRACE_QUERY) },
     { "FCOLLISION_FUNC_ENABLE_TOUCH_EVENT", ENGINE_VALUE((uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_TOUCH_EVENT) },
@@ -953,7 +960,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
     { "FCOLLISION_FUNC_ENABLE_TOUCH_PERSISTS", ENGINE_VALUE((uint64_t)CollisionFunctionMask_t::FCOLLISION_FUNC_ENABLE_TOUCH_PERSISTS) }
         });
 
-    ADD_VARIABLES("_G", "RnQueryObjectSet", {
+    ADD_VARIABLES("RnQueryObjectSet", {
     { "RNQUERY_OBJECTS_STATIC", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_STATIC) },
     { "RNQUERY_OBJECTS_DYNAMIC", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_DYNAMIC) },
     { "RNQUERY_OBJECTS_NON_COLLIDEABLE", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_NON_COLLIDEABLE) },
@@ -963,13 +970,13 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
     { "RNQUERY_OBJECTS_ALL", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_ALL) }
         });
 
-    ADD_VARIABLES("_G", "HitboxShapeType", {
+    ADD_VARIABLES("HitboxShapeType", {
     { "HITBOX_SHAPE_HULL", ENGINE_VALUE((uint64_t)HitboxShapeType_t::HITBOX_SHAPE_HULL) },
     { "HITBOX_SHAPE_SPHERE", ENGINE_VALUE((uint64_t)HitboxShapeType_t::HITBOX_SHAPE_SPHERE) },
     { "HITBOX_SHAPE_CAPSULE", ENGINE_VALUE((uint64_t)HitboxShapeType_t::HITBOX_SHAPE_CAPSULE) }
         });
 
-    ADD_VARIABLES("_G", "TraceMask", {
+    ADD_VARIABLES("TraceMask", {
     { "MASK_ALL", ENGINE_VALUE((uint64_t)MASK_ALL) },
     { "MASK_SOLID", ENGINE_VALUE((uint64_t)MASK_SOLID) },
     { "MASK_PLAYERSOLID", ENGINE_VALUE((uint64_t)MASK_PLAYERSOLID) },
@@ -985,7 +992,7 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
     { "MASK_NPCSOLID_BRUSHONLY", ENGINE_VALUE((uint64_t)MASK_NPCSOLID_BRUSHONLY) }
         });
 
-    ADD_VARIABLES("_G", "MaskContents", {
+    ADD_VARIABLES("MaskContents", {
     { "CONTENTS_EMPTY", ENGINE_VALUE((uint64_t)CONTENTS_EMPTY) },
     { "CONTENTS_SOLID", ENGINE_VALUE((uint64_t)CONTENTS_SOLID) },
     { "CONTENTS_HITBOX", ENGINE_VALUE((uint64_t)CONTENTS_HITBOX) },
@@ -1030,29 +1037,5 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
         });
 
     // GetGlobalNamespace(ctx).addConstant("raytrace", RayTrace(plugin_name));
-}
-
-RayTrace::RayTrace(std::string plugin_name)
-{
-    m_plugin_name = plugin_name;
-}
-
-void RayTrace::TracePlayerBBox(Vector* start, Vector* end, bbox_t* bounds, CInternalTraceFilter* filter, CGameTraceInternal* trace)
-{
-    void* sig = GetSignature("TracePlayerBBox");
-    if (sig == nullptr) return;
-
-    filter->Save();
-    reinterpret_cast<TracePlayerBBox_t>(sig)(*start, *end, *bounds, filter->GetRawTraceFilter(), *trace->GetRawTrace());
-    trace->SyncFromTrace();
-}
-
-void RayTrace::TraceShape(Vector* start, Vector* end, InternalRay_t* ray, CInternalTraceFilter* filter, CGameTraceInternal* trace)
-{
-    void* sig = GetSignature("TraceShape");
-    if (sig == nullptr) return;
-
-    filter->Save();
-    reinterpret_cast<TraceShape_t>(sig)(g_Physics, *(ray->GetRawRay()), *start, *end, filter->GetRawTraceFilter(), trace->GetRawTrace());
-    trace->SyncFromTrace();
+    ADD_VARIABLE("_G", "raytrace", MAKE_CLASS_INSTANCE_CTX(ctx, "RayTrace", {}));
 }

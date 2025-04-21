@@ -11,7 +11,6 @@
 #include <swiftly-ext/hooks/function.h>
 #include <swiftly-ext/hooks/vfunction.h>
 
-#pragma once
 #include <embedder/src/embedder.h>
 template<class T>
 struct Stack;
