@@ -100,8 +100,8 @@ void CEntityListener::OnEntityDeleted(CEntityInstance* pEntity)
 
 void OnStartTouch(CEntityInstance* ent)
 {
-    ClassData thisEnt({ { "class_name", "CEntityInstance" }, { "class_ptr", META_IFACEPTR(CEntityInstance) } }, "SDKClass", nullptr);
-    ClassData otherEnt({ { "class_name", "CEntityInstance" }, { "class_ptr", ent } }, "SDKClass", nullptr);
+    ClassData thisEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
+    ClassData otherEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
 
     if (TriggerEvent("sdktools.ext", "OnEntityStartTouch", { &thisEnt, &otherEnt }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
@@ -111,8 +111,8 @@ void OnStartTouch(CEntityInstance* ent)
 
 void OnPostStartTouch(CEntityInstance* ent)
 {
-    ClassData thisEnt({ { "class_name", "CEntityInstance" }, { "class_ptr", META_IFACEPTR(CEntityInstance) } }, "SDKClass", nullptr);
-    ClassData otherEnt({ { "class_name", "CEntityInstance" }, { "class_ptr", ent } }, "SDKClass", nullptr);
+    ClassData thisEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
+    ClassData otherEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
 
     if (TriggerEvent("sdktools.ext", "OnPostEntityStartTouch", { &thisEnt, &otherEnt }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
@@ -122,8 +122,8 @@ void OnPostStartTouch(CEntityInstance* ent)
 
 void OnTouch(CEntityInstance* ent)
 {
-    ClassData thisEnt({ { "class_name", "CEntityInstance" }, { "class_ptr", META_IFACEPTR(CEntityInstance) } }, "SDKClass", nullptr);
-    ClassData otherEnt({ { "class_name", "CEntityInstance" }, { "class_ptr", ent } }, "SDKClass", nullptr);
+    ClassData thisEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
+    ClassData otherEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
 
     if (TriggerEvent("sdktools.ext", "OnEntityTouching", { &thisEnt, &otherEnt }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
@@ -133,8 +133,8 @@ void OnTouch(CEntityInstance* ent)
 
 void OnPostTouch(CEntityInstance* ent)
 {
-    ClassData thisEnt({ { "class_name", "CEntityInstance" }, { "class_ptr", META_IFACEPTR(CEntityInstance) } }, "SDKClass", nullptr);
-    ClassData otherEnt({ { "class_name", "CEntityInstance" }, { "class_ptr", ent } }, "SDKClass", nullptr);
+    ClassData thisEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
+    ClassData otherEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
 
     if (TriggerEvent("sdktools.ext", "OnPostEntityTouching", { &thisEnt, &otherEnt }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
@@ -144,8 +144,8 @@ void OnPostTouch(CEntityInstance* ent)
 
 void OnEndTouch(CEntityInstance* ent)
 {
-    ClassData thisEnt({ { "class_name", "CEntityInstance" }, { "class_ptr", META_IFACEPTR(CEntityInstance) } }, "SDKClass", nullptr);
-    ClassData otherEnt({ { "class_name", "CEntityInstance" }, { "class_ptr", ent } }, "SDKClass", nullptr);
+    ClassData thisEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
+    ClassData otherEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
 
     if (TriggerEvent("sdktools.ext", "OnEntityStopTouch", { &thisEnt, &otherEnt }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
@@ -155,8 +155,8 @@ void OnEndTouch(CEntityInstance* ent)
 
 void OnPostEndTouch(CEntityInstance* ent)
 {
-    ClassData thisEnt({ { "class_name", "CEntityInstance" }, { "class_ptr", META_IFACEPTR(CEntityInstance) } }, "SDKClass", nullptr);
-    ClassData otherEnt({ { "class_name", "CEntityInstance" }, { "class_ptr", ent } }, "SDKClass", nullptr);
+    ClassData thisEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
+    ClassData otherEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
 
     if (TriggerEvent("sdktools.ext", "OnPostEntityStopTouch", { &thisEnt, &otherEnt }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
@@ -166,9 +166,9 @@ void OnPostEndTouch(CEntityInstance* ent)
 
 void OnUse(class InputData_t* ent)
 {
-    ClassData thisEnt({ { "class_name", "CEntityInstance" }, { "class_ptr", META_IFACEPTR(CEntityInstance) } }, "SDKClass", nullptr);
-    ClassData activator({ { "class_name", "CEntityInstance" }, { "class_ptr", ent->pActivator } }, "SDKClass", nullptr);
-    ClassData caller({ { "class_name", "CEntityInstance" }, { "class_ptr", ent->pCaller } }, "SDKClass", nullptr);
+    ClassData thisEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
+    ClassData activator({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent->pActivator) } }, "SDKClass", nullptr);
+    ClassData caller({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent->pCaller) } }, "SDKClass", nullptr);
 
     if (TriggerEvent("sdktools.ext", "OnEntityUse", { &thisEnt, &activator, &caller, ent->nOutputID }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
@@ -178,9 +178,9 @@ void OnUse(class InputData_t* ent)
 
 void OnPostUse(class InputData_t* ent)
 {
-    ClassData thisEnt({ { "class_name", "CEntityInstance" }, { "class_ptr", META_IFACEPTR(CEntityInstance) } }, "SDKClass", nullptr);
-    ClassData activator({ { "class_name", "CEntityInstance" }, { "class_ptr", ent->pActivator } }, "SDKClass", nullptr);
-    ClassData caller({ { "class_name", "CEntityInstance" }, { "class_ptr", ent->pCaller } }, "SDKClass", nullptr);
+    ClassData thisEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
+    ClassData activator({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent->pActivator) } }, "SDKClass", nullptr);
+    ClassData caller({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent->pCaller) } }, "SDKClass", nullptr);
 
     if (TriggerEvent("sdktools.ext", "OnPostEntityUse", { &thisEnt, &activator, &caller, ent->nOutputID }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
