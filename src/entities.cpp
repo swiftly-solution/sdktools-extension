@@ -100,10 +100,10 @@ void CEntityListener::OnEntityDeleted(CEntityInstance* pEntity)
 
 void OnStartTouch(CEntityInstance* ent)
 {
-    ClassData thisEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
-    ClassData otherEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
+    ClassData* thisEnt = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
+    ClassData* otherEnt = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
 
-    if (TriggerEvent("sdktools.ext", "OnEntityStartTouch", { &thisEnt, &otherEnt }, tmpret) == EventResult::Stop)
+    if (TriggerEvent("sdktools.ext", "OnEntityStartTouch", { thisEnt, otherEnt }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
 
     RETURN_META(MRES_IGNORED);
@@ -111,10 +111,10 @@ void OnStartTouch(CEntityInstance* ent)
 
 void OnPostStartTouch(CEntityInstance* ent)
 {
-    ClassData thisEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
-    ClassData otherEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
+    ClassData* thisEnt = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
+    ClassData* otherEnt = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
 
-    if (TriggerEvent("sdktools.ext", "OnPostEntityStartTouch", { &thisEnt, &otherEnt }, tmpret) == EventResult::Stop)
+    if (TriggerEvent("sdktools.ext", "OnPostEntityStartTouch", { thisEnt, otherEnt }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
 
     RETURN_META(MRES_IGNORED);
@@ -122,10 +122,10 @@ void OnPostStartTouch(CEntityInstance* ent)
 
 void OnTouch(CEntityInstance* ent)
 {
-    ClassData thisEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
-    ClassData otherEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
+    ClassData* thisEnt = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
+    ClassData* otherEnt = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
 
-    if (TriggerEvent("sdktools.ext", "OnEntityTouching", { &thisEnt, &otherEnt }, tmpret) == EventResult::Stop)
+    if (TriggerEvent("sdktools.ext", "OnEntityTouching", { thisEnt, otherEnt }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
 
     RETURN_META(MRES_IGNORED);
@@ -133,10 +133,10 @@ void OnTouch(CEntityInstance* ent)
 
 void OnPostTouch(CEntityInstance* ent)
 {
-    ClassData thisEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
-    ClassData otherEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
+    ClassData* thisEnt = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
+    ClassData* otherEnt = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
 
-    if (TriggerEvent("sdktools.ext", "OnPostEntityTouching", { &thisEnt, &otherEnt }, tmpret) == EventResult::Stop)
+    if (TriggerEvent("sdktools.ext", "OnPostEntityTouching", { thisEnt, otherEnt }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
 
     RETURN_META(MRES_IGNORED);
@@ -144,10 +144,10 @@ void OnPostTouch(CEntityInstance* ent)
 
 void OnEndTouch(CEntityInstance* ent)
 {
-    ClassData thisEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
-    ClassData otherEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
+    ClassData* thisEnt = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
+    ClassData* otherEnt = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
 
-    if (TriggerEvent("sdktools.ext", "OnEntityStopTouch", { &thisEnt, &otherEnt }, tmpret) == EventResult::Stop)
+    if (TriggerEvent("sdktools.ext", "OnEntityStopTouch", { thisEnt, otherEnt }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
 
     RETURN_META(MRES_IGNORED);
@@ -155,10 +155,10 @@ void OnEndTouch(CEntityInstance* ent)
 
 void OnPostEndTouch(CEntityInstance* ent)
 {
-    ClassData thisEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
-    ClassData otherEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
+    ClassData* thisEnt = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
+    ClassData* otherEnt = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent) } }, "SDKClass", nullptr);
 
-    if (TriggerEvent("sdktools.ext", "OnPostEntityStopTouch", { &thisEnt, &otherEnt }, tmpret) == EventResult::Stop)
+    if (TriggerEvent("sdktools.ext", "OnPostEntityStopTouch", { thisEnt, otherEnt }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
 
     RETURN_META(MRES_IGNORED);
@@ -166,11 +166,11 @@ void OnPostEndTouch(CEntityInstance* ent)
 
 void OnUse(class InputData_t* ent)
 {
-    ClassData thisEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
-    ClassData activator({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent->pActivator) } }, "SDKClass", nullptr);
-    ClassData caller({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent->pCaller) } }, "SDKClass", nullptr);
+    ClassData* thisEnt = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
+    ClassData* activator = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent->pActivator) } }, "SDKClass", nullptr);
+    ClassData* caller = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent->pCaller) } }, "SDKClass", nullptr);
 
-    if (TriggerEvent("sdktools.ext", "OnEntityUse", { &thisEnt, &activator, &caller, ent->nOutputID }, tmpret) == EventResult::Stop)
+    if (TriggerEvent("sdktools.ext", "OnEntityUse", { thisEnt, activator, caller, ent->nOutputID }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
 
     RETURN_META(MRES_IGNORED);
@@ -178,11 +178,11 @@ void OnUse(class InputData_t* ent)
 
 void OnPostUse(class InputData_t* ent)
 {
-    ClassData thisEnt({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
-    ClassData activator({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent->pActivator) } }, "SDKClass", nullptr);
-    ClassData caller({ { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent->pCaller) } }, "SDKClass", nullptr);
+    ClassData* thisEnt = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(META_IFACEPTR(CEntityInstance)) } }, "SDKClass", nullptr);
+    ClassData* activator = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent->pActivator) } }, "SDKClass", nullptr);
+    ClassData* caller = new ClassData({ { "should_mark_freeable", true }, { "class_name", std::string("CEntityInstance") }, { "class_ptr", (void*)(ent->pCaller) } }, "SDKClass", nullptr);
 
-    if (TriggerEvent("sdktools.ext", "OnPostEntityUse", { &thisEnt, &activator, &caller, ent->nOutputID }, tmpret) == EventResult::Stop)
+    if (TriggerEvent("sdktools.ext", "OnPostEntityUse", { thisEnt, activator, caller, ent->nOutputID }, tmpret) == EventResult::Stop)
         RETURN_META(MRES_SUPERCEDE);
 
     RETURN_META(MRES_IGNORED);
