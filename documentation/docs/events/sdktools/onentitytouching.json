@@ -1,0 +1,12 @@
+{
+    "kind": "event",
+    "mode": "core",
+    "event_name": "OnEntityTouching",
+    "description": "This game event is triggered when an entity is touching another entity.",
+    "arguments": {
+        "entity": "CEntityInstance",
+        "otherEntity": "CEntityInstance"
+    },
+    "return": "void",
+    "games": "all"
+}

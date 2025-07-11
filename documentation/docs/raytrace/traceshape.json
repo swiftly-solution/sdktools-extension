@@ -1,0 +1,14 @@
+{
+    "kind": "function",
+    "function": "TraceShape",
+    "description": "Executes TraceShape on the specified filter and ray.",
+    "arguments": {
+        "start": "Vector",
+        "end": "Vector",
+        "ray": "Ray_t",
+        "filter": "CTraceFilter",
+        "trace_out": "trace_t"
+    },
+    "return": "void",
+    "games": "all"
+}

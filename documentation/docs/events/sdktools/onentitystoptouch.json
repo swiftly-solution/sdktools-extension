@@ -1,0 +1,12 @@
+{
+    "kind": "event",
+    "mode": "core",
+    "event_name": "OnEntityStopTouch",
+    "description": "This game event is triggered when an entity stopped touching another entity.",
+    "arguments": {
+        "entity": "CEntityInstance",
+        "otherEntity": "CEntityInstance"
+    },
+    "return": "void",
+    "games": "all"
+}

@@ -1,0 +1,11 @@
+{
+    "kind": "function",
+    "function": "ListenEntityTouchUse",
+    "override_variable": true,
+    "description": "Adds the entity touch listeners to class name.",
+    "arguments": {
+        "class_name": "string"
+    },
+    "return": "void",
+    "games": "all"
+}

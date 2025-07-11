@@ -1,0 +1,14 @@
+{
+    "kind": "function",
+    "function": "TracePlayerBBox",
+    "description": "Executes TracePlayerBBox on the specified filter and box bounds.",
+    "arguments": {
+        "start": "Vector",
+        "end": "Vector",
+        "bounds": "BBox",
+        "filter": "CTraceFilter",
+        "trace_out": "trace_t"
+    },
+    "return": "void",
+    "games": "all"
+}

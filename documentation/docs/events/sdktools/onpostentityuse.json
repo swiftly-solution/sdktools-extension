@@ -1,0 +1,14 @@
+{
+    "kind": "event",
+    "mode": "core",
+    "event_name": "OnPostEntityUse",
+    "description": "This game event is triggered after an entity stopped touching another entity.",
+    "arguments": {
+        "entity": "CEntityInstance",
+        "activator": "CEntityInstance",
+        "caller": "CEntityInstance",
+        "outputID": "int32"
+    },
+    "return": "void",
+    "games": "all"
+}
