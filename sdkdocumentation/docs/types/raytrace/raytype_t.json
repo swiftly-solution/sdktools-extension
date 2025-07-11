@@ -1,0 +1,13 @@
+{
+    "kind": "type",
+    "name": "RayType_t",
+    "description": "These are the ray types available.",
+    "values": {
+        "RAY_TYPE_LINE": "0",
+        "RAY_TYPE_SPHERE": "1",
+        "RAY_TYPE_HULL": "2",
+        "RAY_TYPE_CAPSULE": "3",
+        "RAY_TYPE_MESH": "4"
+    },
+    "games": "all"
+}

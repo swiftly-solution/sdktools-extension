@@ -1,0 +1,21 @@
+{
+    "kind": "type",
+    "name": "TraceMask",
+    "description": "These are the trace hit masks available.",
+    "values": {
+        "MASK_ALL": "18446744073709551615",
+        "MASK_SOLID": "798721",
+        "MASK_PLAYERSOLID": "798737",
+        "MASK_NPCSOLID": "798753",
+        "MASK_NPCFLUID": "790561",
+        "MASK_WATER": "98304",
+        "MASK_SHOT": "1839107",
+        "MASK_SHOT_BRUSHONLY": "1052673",
+        "MASK_SHOT_HULL": "1847297",
+        "MASK_SHOT_PORTAL": "790529",
+        "MASK_SOLID_BRUSHONLY": "12289",
+        "MASK_PLAYERSOLID_BRUSHONLY": "12305",
+        "MASK_NPCSOLID_BRUSHONLY": "12321"
+    },
+    "games": "all"
+}

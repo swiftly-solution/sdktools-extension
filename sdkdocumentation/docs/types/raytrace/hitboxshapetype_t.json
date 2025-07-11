@@ -1,0 +1,11 @@
+{
+    "kind": "type",
+    "name": "HitboxShapeType_t",
+    "description": "These are the hitbox shape types available.",
+    "values": {
+        "HITBOX_SHAPE_HULL": "0",
+        "HITBOX_SHAPE_SPHERE": "1",
+        "HITBOX_SHAPE_CAPSULE": "2"
+    },
+    "games": "all"
+}
