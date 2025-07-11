@@ -1,0 +1,51 @@
+{
+    "kind": "class",
+    "name": "CPhysSurfacePropertiesAudio",
+    "description": "RayTracing extension CPhysSurfacePropertiesAudio.",
+    "constructor": {
+        "arguments": {},
+        "return": "CPhysSurfacePropertiesAudio"
+    },
+    "properties": [
+        {
+            "name": "reflectivity",
+            "type": "float",
+            "writable": true
+        },
+        {
+            "name": "hardnessFactor",
+            "type": "float",
+            "writable": true
+        },
+        {
+            "name": "roughnessFactor",
+            "type": "float",
+            "writable": true
+        },
+        {
+            "name": "roughThreshold",
+            "type": "float",
+            "writable": true
+        },
+        {
+            "name": "hardThreshold",
+            "type": "float",
+            "writable": true
+        },
+        {
+            "name": "hardVelocityThreshold",
+            "type": "float",
+            "writable": true
+        },
+        {
+            "name": "StaticImpactVolume",
+            "type": "float",
+            "writable": true
+        },
+        {
+            "name": "OcclusionFactor",
+            "type": "float",
+            "writable": true
+        }
+    ]
+}

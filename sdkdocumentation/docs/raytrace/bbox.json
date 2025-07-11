@@ -1,0 +1,21 @@
+{
+    "kind": "class",
+    "name": "BBox",
+    "description": "RayTracing extension BBox.",
+    "constructor": {
+        "arguments": {},
+        "return": "BBox"
+    },
+    "properties": [
+        {
+            "name": "mins",
+            "type": "Vector",
+            "writable": true
+        },
+        {
+            "name": "maxs",
+            "type": "Vector",
+            "writable": true
+        }
+    ]
+}

@@ -1,0 +1,62 @@
+{
+    "kind": "class",
+    "name": "Ray_t",
+    "description": "RayTracing extension Ray_t.",
+    "constructor": {
+        "arguments": {},
+        "return": "Ray_t"
+    },
+    "functions": [
+        {
+            "name": "InitLine",
+            "arguments": {
+                "startOffset": "Vector"
+            },
+            "return": "void"
+        },
+        {
+            "name": "InitSphere",
+            "arguments": {
+                "center": "Vector",
+                "radius": "float"
+            },
+            "return": "void"
+        },
+        {
+            "name": "InitHull",
+            "arguments": {
+                "min": "Vector",
+                "max": "Vector"
+            },
+            "return": "void"
+        },
+        {
+            "name": "InitCapsule",
+            "arguments": {
+                "centerA": "Vector",
+                "centerB": "Vector",
+                "radius": "float"
+            },
+            "return": "void"
+        },
+        {
+            "name": "InitMesh",
+            "arguments": {
+                "min": "Vector",
+                "max": "Vector",
+                "vertices": "Vector[]"
+            },
+            "return": "void"
+        },
+        {
+            "name": "GetRayPtr",
+            "arguments": {},
+            "return": "string"
+        },
+        {
+            "name": "GetType",
+            "arguments": {},
+            "return": "RayType_t"
+        }
+    ]
+}

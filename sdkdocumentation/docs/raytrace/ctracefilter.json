@@ -1,0 +1,98 @@
+{
+    "kind": "class",
+    "name": "CTraceFilter",
+    "description": "RayTracing extension CTraceFilter.",
+    "constructor": {
+        "arguments": {},
+        "return": "CTraceFilter"
+    },
+    "properties": [
+        {
+            "name": "InteractsWith",
+            "type": "uint64",
+            "writable": true
+        },
+        {
+            "name": "InteractsExclude",
+            "type": "uint64",
+            "writable": true
+        },
+        {
+            "name": "InteractsAs",
+            "type": "uint64",
+            "writable": true
+        },
+        {
+            "name": "EntityIdsToIgnore",
+            "type": "uint32[]",
+            "writable": true
+        },
+        {
+            "name": "OwnerIdsToIgnore",
+            "type": "uint32[]",
+            "writable": true
+        },
+        {
+            "name": "HierarchyIds",
+            "type": "uint16[]",
+            "writable": true
+        },
+        {
+            "name": "ObjectSetMask",
+            "type": "uint16",
+            "writable": true
+        },
+        {
+            "name": "CollisionGroup",
+            "type": "uint32",
+            "writable": true
+        },
+        {
+            "name": "HitSolid",
+            "type": "bool",
+            "writable": true
+        },
+        {
+            "name": "HitSolidRequiresGenerateContacts",
+            "type": "bool",
+            "writable": true
+        },
+        {
+            "name": "HitTrigger",
+            "type": "bool",
+            "writable": true
+        },
+        {
+            "name": "ShouldIgnoreDisabledPairs",
+            "type": "bool",
+            "writable": true
+        },
+        {
+            "name": "IgnoreIfBothInteractWithHitboxes",
+            "type": "bool",
+            "writable": true
+        },
+        {
+            "name": "ForceHitEverything",
+            "type": "bool",
+            "writable": true
+        },
+        {
+            "name": "Unknown",
+            "type": "bool",
+            "writable": true
+        },
+        {
+            "name": "IterateEntities",
+            "type": "bool",
+            "writable": true
+        }
+    ],
+    "functions": [
+        {
+            "name": "Save",
+            "arguments": {},
+            "return": "void"
+        }
+    ]
+}

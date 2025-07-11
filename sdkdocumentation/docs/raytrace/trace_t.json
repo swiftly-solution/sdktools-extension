@@ -1,0 +1,108 @@
+{
+    "kind": "class",
+    "name": "trace_t",
+    "description": "RayTracing extension trace_t.",
+    "constructor": {
+        "arguments": {},
+        "return": "trace_t"
+    },
+    "properties": [
+        {
+            "name": "SurfaceProperties",
+            "type": "CPhysSurfaceProperties",
+            "writable": false
+        },
+        {
+            "name": "Hitbox",
+            "type": "CHitBox",
+            "writable": false
+        },
+        {
+            "name": "Contents",
+            "type": "uint64",
+            "writable": true
+        },
+        {
+            "name": "ShapeAttributes",
+            "type": "RnCollisionAttr_t",
+            "writable": true
+        },
+        {
+            "name": "StartPos",
+            "type": "Vector",
+            "writable": true
+        },
+        {
+            "name": "EndPos",
+            "type": "Vector",
+            "writable": true
+        },
+        {
+            "name": "HitNormal",
+            "type": "Vector",
+            "writable": true
+        },
+        {
+            "name": "HitPoint",
+            "type": "Vector",
+            "writable": true
+        },
+        {
+            "name": "HitOffset",
+            "type": "float",
+            "writable": true
+        },
+        {
+            "name": "Fraction",
+            "type": "float",
+            "writable": true
+        },
+        {
+            "name": "Triangle",
+            "type": "int32",
+            "writable": true
+        },
+        {
+            "name": "HitboxBoneIndex",
+            "type": "int16",
+            "writable": true
+        },
+        {
+            "name": "RayType",
+            "type": "RayType_t",
+            "writable": true
+        },
+        {
+            "name": "StartInSolid",
+            "type": "bool",
+            "writable": true
+        },
+        {
+            "name": "ExactHitPoint",
+            "type": "bool",
+            "writable": true
+        }
+    ],
+    "functions": [
+        {
+            "name": "GetEntity",
+            "arguments": {},
+            "return": "string"
+        },
+        {
+            "name": "SyncToTrace",
+            "arguments": {},
+            "return": "void"
+        },
+        {
+            "name": "SyncFromTrace",
+            "arguments": {},
+            "return": "void"
+        },
+        {
+            "name": "GetRawTrace",
+            "arguments": {},
+            "return": "string"
+        }
+    ]
+}

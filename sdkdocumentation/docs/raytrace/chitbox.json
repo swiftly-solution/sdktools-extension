@@ -1,0 +1,81 @@
+{
+    "kind": "class",
+    "name": "CHitBox",
+    "description": "RayTracing extension CHitBox.",
+    "constructor": {
+        "arguments": {},
+        "return": "CHitBox"
+    },
+    "properties": [
+        {
+            "name": "name",
+            "type": "string",
+            "writable": true
+        },
+        {
+            "name": "SurfaceProperty",
+            "type": "string",
+            "writable": true
+        },
+        {
+            "name": "BoneName",
+            "type": "string",
+            "writable": true
+        },
+        {
+            "name": "MinBounds",
+            "type": "Vector",
+            "writable": true
+        },
+        {
+            "name": "MaxBounds",
+            "type": "Vector",
+            "writable": true
+        },
+        {
+            "name": "ShapeRadius",
+            "type": "float",
+            "writable": true
+        },
+        {
+            "name": "BoneNameHash",
+            "type": "uint32",
+            "writable": true
+        },
+        {
+            "name": "GroupId",
+            "type": "int32",
+            "writable": true
+        },
+        {
+            "name": "ShapeType",
+            "type": "uint8",
+            "writable": true
+        },
+        {
+            "name": "TranslationOnly",
+            "type": "bool",
+            "writable": true
+        },
+        {
+            "name": "CRC",
+            "type": "uint32",
+            "writable": true
+        },
+        {
+            "name": "RenderColor",
+            "type": "Color",
+            "writable": true
+        },
+        {
+            "name": "HitBoxIndex",
+            "type": "uint16",
+            "writable": true
+        },
+        {
+            "name": "ShouldForceTransform",
+            "type": "bool",
+            "writable": true
+        }
+    ]
+}

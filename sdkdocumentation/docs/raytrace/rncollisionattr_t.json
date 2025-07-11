@@ -1,0 +1,51 @@
+{
+    "kind": "class",
+    "name": "RnCollisionAttr_t",
+    "description": "RayTracing extension RnCollisionAttr_t.",
+    "constructor": {
+        "arguments": {},
+        "return": "RnCollisionAttr_t"
+    },
+    "properties": [
+        {
+            "name": "InteractsAs",
+            "type": "uint64",
+            "writable": true
+        },
+        {
+            "name": "InteractsWith",
+            "type": "uint64",
+            "writable": true
+        },
+        {
+            "name": "InteractsExclude",
+            "type": "uint64",
+            "writable": true
+        },
+        {
+            "name": "EntityId",
+            "type": "uint32",
+            "writable": true
+        },
+        {
+            "name": "OwnerId",
+            "type": "uint32",
+            "writable": true
+        },
+        {
+            "name": "HierarchyId",
+            "type": "uint16",
+            "writable": true
+        },
+        {
+            "name": "CollisionGroup",
+            "type": "uint8",
+            "writable": true
+        },
+        {
+            "name": "CollisionFunctionMask",
+            "type": "uint8",
+            "writable": true
+        }
+    ]
+}

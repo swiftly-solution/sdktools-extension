@@ -1,0 +1,66 @@
+{
+    "kind": "class",
+    "name": "CPhysSurfacePropertiesSoundNames",
+    "description": "RayTracing extension CPhysSurfacePropertiesSoundNames.",
+    "constructor": {
+        "arguments": {},
+        "return": "CPhysSurfacePropertiesSoundNames"
+    },
+    "properties": [
+        {
+            "name": "impactSoft",
+            "type": "string",
+            "writable": true
+        },
+        {
+            "name": "impactHard",
+            "type": "string",
+            "writable": true
+        },
+        {
+            "name": "scrapeSmooth",
+            "type": "string",
+            "writable": true
+        },
+        {
+            "name": "scrapeRough",
+            "type": "string",
+            "writable": true
+        },
+        {
+            "name": "bulletImpact",
+            "type": "string",
+            "writable": true
+        },
+        {
+            "name": "rolling",
+            "type": "string",
+            "writable": true
+        },
+        {
+            "name": "break",
+            "type": "string",
+            "writable": true
+        },
+        {
+            "name": "strain",
+            "type": "string",
+            "writable": true
+        },
+        {
+            "name": "meleeImpact",
+            "type": "string",
+            "writable": true
+        },
+        {
+            "name": "pushOff",
+            "type": "string",
+            "writable": true
+        },
+        {
+            "name": "skidStop",
+            "type": "string",
+            "writable": true
+        }
+    ]
+}

@@ -1,0 +1,46 @@
+{
+    "kind": "class",
+    "name": "CPhysSurfacePropertiesPhysics",
+    "description": "RayTracing extension CPhysSurfacePropertiesPhysics.",
+    "constructor": {
+        "arguments": {},
+        "return": "CPhysSurfacePropertiesPhysics"
+    },
+    "properties": [
+        {
+            "name": "friction",
+            "type": "float",
+            "writable": true
+        },
+        {
+            "name": "elasticity",
+            "type": "float",
+            "writable": true
+        },
+        {
+            "name": "density",
+            "type": "float",
+            "writable": true
+        },
+        {
+            "name": "thickness",
+            "type": "float",
+            "writable": true
+        },
+        {
+            "name": "softContactFrequency",
+            "type": "float",
+            "writable": true
+        },
+        {
+            "name": "softContactDampingRatio",
+            "type": "float",
+            "writable": true
+        },
+        {
+            "name": "wheelDrag",
+            "type": "float",
+            "writable": true
+        }
+    ]
+}

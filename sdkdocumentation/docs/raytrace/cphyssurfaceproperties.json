@@ -1,0 +1,61 @@
+{
+    "kind": "class",
+    "name": "CPhysSurfaceProperties",
+    "description": "RayTracing extension CPhysSurfaceProperties.",
+    "constructor": {
+        "arguments": {},
+        "return": "CPhysSurfaceProperties"
+    },
+    "properties": [
+        {
+            "name": "name",
+            "type": "string",
+            "writable": true
+        },
+        {
+            "name": "nameHash",
+            "type": "uint32",
+            "writable": true
+        },
+        {
+            "name": "baseNameHash",
+            "type": "uint32",
+            "writable": true
+        },
+        {
+            "name": "ListIndex",
+            "type": "int32",
+            "writable": true
+        },
+        {
+            "name": "BaseListIndex",
+            "type": "int32",
+            "writable": true
+        },
+        {
+            "name": "Hidden",
+            "type": "bool",
+            "writable": true
+        },
+        {
+            "name": "description",
+            "type": "string",
+            "writable": true
+        },
+        {
+            "name": "physics",
+            "type": "CPhysSurfacePropertiesPhysics",
+            "writable": true
+        },
+        {
+            "name": "audioSounds",
+            "type": "CPhysSurfacePropertiesSoundNames",
+            "writable": true
+        },
+        {
+            "name": "audioParams",
+            "type": "CPhysSurfacePropertiesAudio",
+            "writable": true
+        }
+    ]
+}
