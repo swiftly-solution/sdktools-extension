@@ -38,11 +38,6 @@
             "writable": true
         },
         {
-            "name": "break",
-            "type": "string",
-            "writable": true
-        },
-        {
             "name": "strain",
             "type": "string",
             "writable": true

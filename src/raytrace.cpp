@@ -373,14 +373,6 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
             data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_rolling.Set(value.c_str());
         });
 
-    ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "break", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_break.String());
-        },
-        [](FunctionContext* context, ClassData* data) -> void {
-            std::string value = context->GetArgumentOr<std::string>(0, "");
-            data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_break.Set(value.c_str());
-        });
-
     ADD_CLASS_MEMBER("CPhysSurfacePropertiesSoundNames", "strain", [](FunctionContext* context, ClassData* data) -> void {
         context->SetReturn(data->GetData<CPhysSurfacePropertiesSoundNames*>("cphyssurfacepropertiesaudio_ptr")->m_strain.String());
         },
