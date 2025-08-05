@@ -237,14 +237,6 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
             data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_softContactDampingRatio = value;
         });
 
-    ADD_CLASS_MEMBER("CPhysSurfacePropertiesPhysics", "wheelDrag", [](FunctionContext* context, ClassData* data) -> void {
-        context->SetReturn(data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_wheelDrag);
-        },
-        [](FunctionContext* context, ClassData* data) -> void {
-            float value = context->GetArgumentOr<float>(0, 0);
-            data->GetData<CPhysSurfacePropertiesPhysics*>("cphyssurfacepropertiesphysics_ptr")->m_wheelDrag = value;
-        });
-
     ADD_CLASS("CPhysSurfacePropertiesAudio");
 
     ADD_CLASS_FUNCTION("CPhysSurfacePropertiesAudio", "CPhysSurfacePropertiesAudio", [](FunctionContext* context, ClassData* data) -> void {
@@ -962,12 +954,11 @@ void RayTrace_OnPluginLoad(EContext* ctx, std::string plugin_name)
 
     ADD_VARIABLES("RnQueryObjectSet", {
     { "RNQUERY_OBJECTS_STATIC", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_STATIC) },
+    { "RNQUERY_OBJECTS_KEYFRAMED", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_KEYFRAMED) },
     { "RNQUERY_OBJECTS_DYNAMIC", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_DYNAMIC) },
-    { "RNQUERY_OBJECTS_NON_COLLIDEABLE", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_NON_COLLIDEABLE) },
-    { "RNQUERY_OBJECTS_KEYFRAMED_ONLY", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_KEYFRAMED_ONLY) },
-    { "RNQUERY_OBJECTS_DYNAMIC_ONLY", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_DYNAMIC_ONLY) },
+    { "RNQUERY_OBJECTS_LOCATABLE", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_LOCATABLE) },
     { "RNQUERY_OBJECTS_ALL_GAME_ENTITIES", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_ALL_GAME_ENTITIES) },
-    { "RNQUERY_OBJECTS_ALL", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_ALL) }
+    { "RNQUERY_OBJECTS_ALL", ENGINE_VALUE((uint64_t)RnQueryObjectSet::RNQUERY_OBJECTS_ALL) },
         });
 
     ADD_VARIABLES("HitboxShapeType", {

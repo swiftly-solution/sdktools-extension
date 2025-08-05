@@ -36,11 +36,6 @@
             "name": "softContactDampingRatio",
             "type": "float",
             "writable": true
-        },
-        {
-            "name": "wheelDrag",
-            "type": "float",
-            "writable": true
         }
     ]
 }
