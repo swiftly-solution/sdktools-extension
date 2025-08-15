@@ -1,18 +1,18 @@
 {
     "CBaseEntity_StartTouch": {
+        "windows": 150,
+        "linux": 149
+    },
+    "CBaseEntity_Touch": {
         "windows": 151,
         "linux": 150
     },
-    "CBaseEntity_Touch": {
+    "CBaseEntity_EndTouch": {
         "windows": 152,
         "linux": 151
     },
-    "CBaseEntity_EndTouch": {
-        "windows": 153,
-        "linux": 152
-    },
     "CBaseEntity_Use": {
-        "windows": 148,
-        "linux": 147
+        "windows": 147,
+        "linux": 146
     }
 }
